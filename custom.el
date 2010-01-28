@@ -336,7 +336,7 @@
 	(message "File reloaded")))
 
 (defun dot-emacs ()  (interactive)
-  (find-file (concat home-dir "/.emacs")))
+  (find-file (concat emacsd-dir "init.el")))
 
 (defun ecustom ()  (interactive)
   (find-file (concat emacsd-dir "custom.el")))
