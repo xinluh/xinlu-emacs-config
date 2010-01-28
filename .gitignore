@@ -1,0 +1,9 @@
+/auto-save-list/*
+/autosave/*
+/server/server
+/tramp
+/w3m/*
+/g-client/*
+*.elc
+/.ido.last
+/smex.save

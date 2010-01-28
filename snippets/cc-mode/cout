@@ -1,0 +1,3 @@
+#name : cout << ... << endl;
+# --
+std::cout << "Hello from file: " << __FILE__ << ":" << __LINE__  << std::endl;
