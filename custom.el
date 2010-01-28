@@ -33,7 +33,6 @@
 (setq kill-emacs-query-functions
       (cons (lambda () (yes-or-no-p "Really kill Emacs? "))
             kill-emacs-query-functions))
-;; (put 'dired-find-alternate-file 'disabled nil)
 
 (ido-mode t)
 (setq ido-create-new-buffer 'always)
@@ -57,8 +56,6 @@
 (goto-address-mode t)
 ;; (goto-address-prog-mode t)
 (setq resize-mini-windows nil)
-(setq image-dired-thumb-height 400)
-(setq image-dired-thumb-width 400)
 (setq cpp-face-type 'dark)
 ;-----editing settings----
 (cua-mode t)
@@ -88,14 +85,6 @@
           'comint-watch-for-password-prompt nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (setq comint-prompt-read-only t)
-
-; -----dired settings---
-(setq dired-listing-switches "-alh") ; human readable sizes
-(when is-win32 (setq ls-lisp-ignore-case t)
-      ;(setq ls-lisp-verbosity (delq 'uid ls-lisp-verbosity))
-      (setq ls-lisp-verbosity (delq 'gid ls-lisp-verbosity))
-      (setq ls-lisp-dirs-first t))
-(setq dired-dwim-target t)
 
 ; -----other settings----
 (setq compilation-scroll-output t) ; always scroll *compilation* buffer
@@ -300,12 +289,6 @@
 ;(setq explicit-bash-args (quote ("--noediting" "--login")))
 
 
-;for image-dired mode
-(when is-win32
-  (add-to-list 'exec-path "D:/Programs/imagemagick")
-  (setq image-dired-external-viewer  "D:/Programs/IrfanView/i_view32.exe"))
-
-	 
 ;=================================================
 
 ;for efficient commenting

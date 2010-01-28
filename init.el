@@ -70,7 +70,9 @@
 (byte-compile-if-newer-and-load "custom-faces")
 (byte-compile-if-newer-and-load "custom")
 (byte-compile-if-newer-and-load "custom-hooks")
+
 (byte-compile-if-newer-and-load "my-tex")
+(byte-compile-if-newer-and-load "my-dired")
    
 (server-start)
 
