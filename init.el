@@ -28,6 +28,7 @@
 
 (autoload 'cmd-mode "cmd-mode" "CMD mode." t)
 (autoload 'csharp-mode "csharp-mode")
+(autoload 'ahk-mode "ahk-mode")
 (autoload 'svn-status "psvn")
 (autoload 'folding-mode "folding" "Folding mode" t)
 
