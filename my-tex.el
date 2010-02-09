@@ -41,7 +41,7 @@
    
 ;; I keep all the electronic versions of the papers in my bibliography (PostScript or PDF)
 ;; in a single directory, with the name of the file corresponding to the BibTeX key. When
-;; I†¢m writing a paper and want to refresh my memory about some work I cite, the following
+;; I'm writing a paper and want to refresh my memory about some work I cite, the following
 ;; code gives me instant access to the electronic version of a papers. Just put the
 ;; TextCursor on a BibTeX key, press S-F6, and GV or AcrobatReader? opens the
 ;; corresponding file.
