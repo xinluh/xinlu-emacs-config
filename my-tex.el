@@ -11,7 +11,7 @@
 		  ("^pdf$" "." "start \"\" %o")
 		  ("^html?$" "." "start \"\" %o")))
   (setq TeX-source-specials-view-position-flags "-s %n%b")
-  (setq TeX-source-specials-view-editor-flags "")
+  (setq TeX-source-specials-view-editor-flags ""))
   
   ;; add miktex to path
   (add-to-list 'exec-path "D:/Programs/miktex/miktex/bin")

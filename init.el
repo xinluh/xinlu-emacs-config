@@ -33,7 +33,8 @@
 (autoload 'folding-mode "folding" "Folding mode" t)
 
 (autoload 'magit-status "magit" nil t)
-(setq magit-git-executable "git.cmd"))
+(when is-win32
+  (setq magit-git-executable "git.cmd"))
    
 ;; (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
 
