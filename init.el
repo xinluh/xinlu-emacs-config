@@ -79,6 +79,8 @@
 (byte-compile-if-newer-and-load "my-tex")
 (byte-compile-if-newer-and-load "my-dired")
    
+(setq server-use-tcp t)
+(setq server-host "myPC")
 (server-start)
 
 ; maximize emacs on startup
