@@ -78,7 +78,9 @@
 
 (byte-compile-if-newer-and-load "my-tex")
 (byte-compile-if-newer-and-load "my-dired")
-   
+
+(if (and is-win32 (file-exists-p "d:/Users/xinlu/Documents/"))
+	(setq server-auth-dir "d:/Users/xinlu/Documents/"))
 (setq server-use-tcp t)
 (setq server-host "myPC")
 (server-start)
