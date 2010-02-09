@@ -46,7 +46,7 @@
 						   "^\\*Ido" "\\*shell\\*" "\\*Help"
 						   "^\\*.*output\\*" "^\\*TeX Help\\*"
 						   "^\\*magit-.*\\*"))
-						   
+
 (winner-mode t)
 (setq ediff-split-window-function (lambda (&optional arg)
 									(if (> (frame-width) 150)
@@ -110,8 +110,6 @@
 (setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
-   
-   
 ; -----keyboard bindings-----
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 (global-set-key (kbd "C-;")     'dabbrev-expand)
@@ -126,18 +124,18 @@
 (global-set-key (kbd "M-x")     'smex)
 (global-set-key (kbd "M-S-x")     'execute-extended-command)
 (global-set-key (kbd "C--")     (lambda () (interactive) (cua-set-mark 5)))
-(global-set-key (kbd "C-c o")   'occur) 
-(global-set-key (kbd "C-c i")   'insert-path) 
+(global-set-key (kbd "C-c o")   'occur)
+(global-set-key (kbd "C-c i")   'insert-path)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-j")     'backward-char) ; was indent-new-comment-line
 (global-set-key (kbd "M-l")     'forward-char)  ; was downcase-word
 (global-set-key (kbd "M-i")     'previous-line) ; was tab-to-tab-stop
 (global-set-key (kbd "M-k")     'next-line) ; was kill-sentence
-(global-set-key (kbd "M-s")     'backward-char) 
+(global-set-key (kbd "M-s")     'backward-char)
 (global-set-key (kbd "M-f")     'forward-char)  ; was foward-word
 (global-set-key (kbd "M-e")     'previous-line) ; was foward-sentence
 (global-set-key (kbd "M-d")     'next-line)		; was kill-word
-(global-set-key (kbd "M-#")     'quick-calc)		
+(global-set-key (kbd "M-#")     'quick-calc)
 (global-set-key [C-tab]         'next-buffer)
 (global-set-key [C-S-tab]       'previous-buffer)
 (global-set-key (kbd "<C-S-iso-lefttab>")  'previous-buffer)
@@ -209,20 +207,20 @@
 (define-key minibuffer-local-completion-map (kbd "<f3>")
                           'complete-minibuffer-path)
 (define-key minibuffer-local-map [f3]
-  (lambda () (interactive) 
+  (lambda () (interactive)
      (insert (buffer-name (window-buffer (minibuffer-selected-window))))))
 (define-key minibuffer-local-map (kbd "C-i") 'comint-dynamic-complete)
 
-(setq hippie-expand-try-functions-list 
-    '(try-expand-all-abbrevs 
-     try-expand-dabbrev 
-     try-expand-dabbrev-all-buffers 
-     try-expand-dabbrev-from-kill 
+(setq hippie-expand-try-functions-list
+    '(try-expand-all-abbrevs
+     try-expand-dabbrev
+     try-expand-dabbrev-all-buffers
+     try-expand-dabbrev-from-kill
      yas/hippie-try-expand
-     try-complete-file-name-partially 
-     try-complete-file-name 
-     try-complete-lisp-symbol-partially 
-     try-complete-lisp-symbol)) 
+     try-complete-file-name-partially
+     try-complete-file-name
+     try-complete-lisp-symbol-partially
+     try-complete-lisp-symbol))
 
 ;;automatically close brackets, quotes, etc when typing
 (setq skeleton-pair t)
@@ -351,7 +349,7 @@
 					"^\\(/[a-z0-9]\\{2,5\\}:[-a-zA-Z0-9.]+:\\)" "" filename))
   (insert filename)))
 
-(defun shell-command-mod 
+(defun shell-command-mod
   (command &optional output-buffer error-buffer)
   "shell-command that displays the working direction as prompt"
   (interactive (list (read-from-minibuffer (concat default-directory " $: ")
@@ -427,7 +425,7 @@ replacing matching strings to a specific path"
     (with-temp-buffer
       (apply 'call-process "du" nil t nil "-sch" files)
       (message "Size of marked files: %s"
-               (progn 
+               (progn
                  (re-search-backward "\\(^[0-9.]+[A-Za-z]*\\).*total$")
                   (match-string 1))))))
 
@@ -480,7 +478,7 @@ replacing matching strings to a specific path"
 		 (newname (concat dir "/" name)))
 	(if (not filename)
 		(message "Buffer '%s' is not visiting a file!" name)
-	  (progn 	(copy-file filename newname 1) 	(delete-file filename) 	(set-visited-file-name newname) 	(set-buffer-modified-p nil) 	t)))) 
+	  (progn 	(copy-file filename newname 1) 	(delete-file filename) 	(set-visited-file-name newname) 	(set-buffer-modified-p nil) 	t))))
 
 
 (defvar my-key-pairs
@@ -498,7 +496,7 @@ replacing matching strings to a specific path"
   (if (eq key-pairs nil)
       (message "Keyboard zapped!! ")
       (progn
-        (keyboard-translate (caar key-pairs)  (cadar key-pairs)) 
+        (keyboard-translate (caar key-pairs)  (cadar key-pairs))
         (keyboard-translate (cadar key-pairs) (caar key-pairs))
         (my-key-swap (cdr key-pairs)))))
 
@@ -584,12 +582,12 @@ replacing matching strings to a specific path"
   (progn (let ((f (selected-frame)))
     (modify-frame-parameters f `((fullscreen . ,
 			  (if (eq nil (frame-parameter f 'fullscreen)) 'fullboth nil))))))))
- 
+
 (defun w32-maximize-frame ()
   "Maximize the current frame (windows only)"
   (interactive)
   (w32-send-sys-command 61488))
- 
+
 (defun w32-restore-frame ()
   "Restore a minimized/maximized frame (windows only)"
   (interactive)
@@ -619,7 +617,7 @@ replacing matching strings to a specific path"
   "put the special buffer in the right spot (bottom rigt)"
 ;;   (let ((windows (delete (minibuffer-window) (window-list))))
 ;;     (if (eq 1 (length windows))
-;;         (progn 
+;;         (progn
 ;;           (select-window (car windows))
 ;;           (split-window-vertically)))
     (let ((target-window (get-window-at-corner 4))
@@ -636,7 +634,7 @@ replacing matching strings to a specific path"
 			  (windows (delete (get-window-at-corner 4)
                          (delete (minibuffer-window) (window-list)))))
 ;; 		(if (<= 1 (length windows))
-;; 			(progn 
+;; 			(progn
 ;; 			  (select-window (car windows))
 ;; 			  (split-window-vertically)))
 		  (message (buffer-name (window-buffer (car windows))))
@@ -653,7 +651,7 @@ replacing matching strings to a specific path"
 		  (if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
 			  (setq windows (delete (get-window-at-corner 4) windows)))
 			  ;; 		(if (<= 1 (length windows))
-;; 			(progn 
+;; 			(progn
 ;; 			  (select-window (car windows))
 ;; 			  (split-window-vertically)))
 		  ;; (message (buffer-name (window-buffer (car windows))))
@@ -738,7 +736,7 @@ replacing matching strings to a specific path"
 (defun build-tag-table (dir-name)
   "Create tag files"
   (interactive "DDirectory: ")
-  (shell-command 
+  (shell-command
    (format
 	"find %s -type f  -name \"*.cpp\" -print   -or   -name \"*.hpp\" -print | etags -"
 	dir-name)))
@@ -777,7 +775,7 @@ replacing matching strings to a specific path"
   (find-file (ido-completing-read "Last closed: " closed-files)))
 
 (add-hook 'kill-buffer-hook 'track-closed-file)
-	 
+
 ;; (defun rename-frame (name)
   ;; "rename frame to NAME"
   ;; (interactive "sName: ")
@@ -797,7 +795,7 @@ replacing matching strings to a specific path"
 ;         (run-with-timer 10 nil '(lambda()
 ;                                  (bury-buffer buffer)
 ;                         (replace-buffer-in-windows buffer))))
-;        (t                                                                    
+;        (t
 ;         (message "Compilation exited abnormally: %s" string))))
 ;
 ;(setq compilation-exit-autoclose
@@ -825,7 +823,7 @@ replacing matching strings to a specific path"
 ;;           (bury-buffer buffer)
 ;;           (replace-buffer-in-windows buffer)
 ;;           (message "Compilation successful!"))
-;;          (t                                                                    
+;;          (t
 ;;           (message ""))))
 
 
