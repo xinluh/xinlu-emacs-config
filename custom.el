@@ -114,6 +114,7 @@
 ; -----keyboard bindings-----
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 (global-set-key (kbd "C-;")     'dabbrev-expand)
+(global-set-key (kbd "C-c m")   'imenu-selection-buffer)
 (global-set-key "\M-m"          'extend-selection) ;was newline-and-indent
 (global-set-key "\C-z"          'undo)
 (global-set-key "\C-v"          'yank)

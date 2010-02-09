@@ -22,7 +22,8 @@
   (local-set-key (kbd "C-.")      (lambda () (interactive) (insert "->")))
 
   ;; (folding-mode)
-  (linum-mode)
+  ;; (linum-mode)
+  (imenu-add-menubar-index)
   
 ;;   (setq compile-output-file nil "the output file for compilation")
 ;;   (make-variable-buffer-local 'compile-output-file)
