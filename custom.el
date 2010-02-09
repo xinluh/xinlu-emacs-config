@@ -365,16 +365,6 @@
        ".." d) if (file-exists-p (expand-file-name "Makefile" d))
        return d)) makefile-dir ))
 
-(defun dos2unix ()
-  "Convert this entire buffer from MS-DOS text file format to UNIX."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (replace-regexp "\r$" "" nil)
-    (goto-char (1- (point-max)))
-    (if (looking-at "\C-z")
-        (delete-char 1))))
-
 (defun complete-minibuffer-path ()
   "Extension to the complete word facility of the minibuffer by
 replacing matching strings to a specific path"
