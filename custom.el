@@ -806,6 +806,7 @@ replacing matching strings to a specific path"
       (setq cur (car cur)))
     (setq imenu-selection-target-buffer (current-buffer))
 	(with-current-buffer buf
+	  (setq buffer-read-only nil)
 	  (buffer-disable-undo)
 	  (erase-buffer)
 	  (save-excursion 
