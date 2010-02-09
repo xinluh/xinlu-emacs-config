@@ -128,6 +128,7 @@
 (global-set-key (kbd "C--")     (lambda () (interactive) (cua-set-mark 5)))
 (global-set-key (kbd "C-c o")   'occur) 
 (global-set-key (kbd "C-c i")   'insert-path) 
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-j")     'backward-char) ; was indent-new-comment-line
 (global-set-key (kbd "M-l")     'forward-char)  ; was downcase-word
 (global-set-key (kbd "M-i")     'previous-line) ; was tab-to-tab-stop
