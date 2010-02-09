@@ -5,7 +5,7 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(cpp-face-dark-name-list (quote ("dim gray" "blue" "cyan" "yellow" "red" "dark green" "brown" "dark orange" "dark khaki" "dark violet" "purple" "dark turquoise" "sandle brown" "dark blue" "SlateBlue4")))
- '(safe-local-variable-values (quote ((compile-output-file . "a.out")))))
+ '(safe-local-variable-values (quote ((compile-output-file . "a.out"))))
  '(sql-sqlite-program "sqlite3"))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
