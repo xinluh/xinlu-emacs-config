@@ -13,7 +13,8 @@
 (setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
 									 "*Completions*" "*Buffer List*"
 									 "*Ido Completions*" "*svn-process*"
-									 "*svn-log-edit*" "*Kill Ring*"))
+									 "*svn-log-edit*" "*Kill Ring*"
+									 "*imenu-select*"))
 (if is-emacs23
 	(setq special-display-function 'my-display-buffer-23)
   (setq special-display-function 'my-display-buffer))
@@ -45,7 +46,7 @@
 						   "^\\*tramp" "*Completions*"
 						   "^\\*Ido" "\\*shell\\*" "\\*Help"
 						   "^\\*.*output\\*" "^\\*TeX Help\\*"
-						   "^\\*magit-.*\\*"))
+						   "^\\*magit-.*\\*" "^\\*imenu-select\\*"))
 
 (winner-mode t)
 (setq ediff-split-window-function (lambda (&optional arg)
@@ -775,6 +776,62 @@ replacing matching strings to a specific path"
   (find-file (ido-completing-read "Last closed: " closed-files)))
 
 (add-hook 'kill-buffer-hook 'track-closed-file)
+
+
+(define-derived-mode imenu-selection-mode fundamental-mode "imenu"
+  "Major mode for imenu selection."
+  (suppress-keymap imenu-selection-mode-map)
+  (define-key imenu-selection-mode-map "s" 'isearch-forward)
+  (define-key imenu-selection-mode-map "r" 'isearch-backward)
+  (define-key imenu-selection-mode-map "j" 'next-line)
+  (define-key imenu-selection-mode-map "k" 'previous-line)
+  (define-key imenu-selection-mode-map "n" 'next-line)
+  (define-key imenu-selection-mode-map "p" 'previous-line)
+  (define-key imenu-selection-mode-map "l" 'imenu-selection-select)
+  (define-key imenu-selection-mode-map "\C-m" 'imenu-selection-select)
+  (define-key imenu-selection-mode-map "q" 'imenu-selection-quit)
+  )
+(defvar imenu-selection-buffer-name "*imenu-select*")
+(defvar imenu-selection-target-buffer nil)
+(defvar imenu-selection-orig-windows-config nil)
+(defun imenu-selection-buffer (&optional index-alist)
+  (interactive)
+  (require 'which-func)
+  (setq index-alist (if index-alist index-alist (imenu--make-index-alist)))
+  (setq imenu-selection-orig-windows-config
+		(current-window-configuration))
+  (let ((cur (which-function))
+		(buf (get-buffer-create imenu-selection-buffer-name)))
+    (when (listp cur)
+      (setq cur (car cur)))
+    (setq imenu-selection-target-buffer (current-buffer))
+	(with-current-buffer buf
+	  (buffer-disable-undo)
+	  (erase-buffer)
+	  (save-excursion 
+		(dolist (x index-alist)
+		  (insert (car x) "\n"))
+		(if cur (search-backward (concat cur "\n") nil t)))
+	  (imenu-selection-mode)
+	  (setq buffer-read-only t))
+  (pop-to-buffer buf)))
+
+(defun imenu-selection-select ()
+  (interactive)
+  (if (eq major-mode 'imenu-selection-mode)
+  (let ((sel (substring (thing-at-point 'line) 0 -1)))
+    (bury-buffer)
+	(imenu-selection-quit)
+    (imenu sel))))
+
+(defun imenu-selection-quit ()
+  (interactive)
+  (if (eq major-mode 'imenu-selection-mode)
+	  (let (buf (current-buffer))
+		(set-window-configuration imenu-selection-orig-windows-config)
+		(kill-buffer buf))
+	(pop-to-buffer imenu-selection-target-buffer)))
+
 
 ;; (defun rename-frame (name)
   ;; "rename frame to NAME"
