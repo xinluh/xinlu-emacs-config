@@ -99,8 +99,17 @@
 
 (defun my-shell-mode-hook()
   (custom-face-dark)
-  (local-set-key [up] 'comint-previous-input)
-  (local-set-key [down] 'comint-next-input) 
+  (local-set-key [up]          ; cycle backward through command history
+				 '(lambda () (interactive)
+					(if (comint-after-pmark-p)
+						(comint-previous-input 1)
+					  (previous-line 1))))
+  (local-set-key [down]        ; cycle forward through command history
+				 '(lambda () (interactive)
+					(if (comint-after-pmark-p)
+						(comint-next-input 1)
+					  (forward-line 1))))
+	 
 ;  (call-process-shell-command (concat ". " emacsd-dir "/.emacs_bash"))
 )
 (add-hook 'shell-mode-hook 'my-shell-mode-hook)
