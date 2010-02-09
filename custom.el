@@ -1,9 +1,7 @@
 ; -----general settings----
 (setq inhibit-startup-message t)
-;(setq visible-bell nil)
 (setq disabled-command-function nil)
 (fset 'yes-or-no-p 'y-or-n-p) ;make the y or n suffice for a yes or no question
-;(recentf-mode)
 (setq frame-title-format "%b %+%+ (Emacs)") ;; set emacs title to the document
 (set-scroll-bar-mode 'right )
 (when (not is-win32) (tool-bar-mode 0))  ;; don't like toolbar!
@@ -55,7 +53,6 @@
 									  (split-window-vertically arg))))
 (which-function-mode t)
 (goto-address-mode t)
-;; (goto-address-prog-mode t)
 (setq resize-mini-windows nil)
 (setq cpp-face-type 'dark)
 ;-----editing settings----
@@ -64,9 +61,7 @@
 ;(setq cua-enable-cua-keys nil)
 ;(setq cua-keep-region-after-copy t)
 (setq cua-auto-mark-last-change t)
-;(setq save-silently-p t)
 (setq-default transient-mark-mode t)
-;; (blink-cursor-mode nil) ;; blinking is not good
 (setq scroll-step 1) ;smooth-scrolling
 (setq kill-whole-line t)
 (setq kill-read-only-ok t) ; don't beep when killing line in readonly buffer
@@ -95,7 +90,6 @@
 (add-to-list 'auto-mode-alist '("\\.bat$" . cmd-mode))
 (add-to-list 'auto-mode-alist '("\\.ahk$" . ahk-mode))
 (setq ahk-syntax-directory (concat emacsd-dir "Syntax/"))
-;; (setq recentf-save-file (concat home-dir ".recentf"))
 (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -print0 | xargs -0 -e grep -nH -e ")
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)
@@ -213,17 +207,6 @@
      (insert (buffer-name (window-buffer (minibuffer-selected-window))))))
 (define-key minibuffer-local-map (kbd "C-i") 'comint-dynamic-complete)
 
-(setq hippie-expand-try-functions-list
-    '(try-expand-all-abbrevs
-     try-expand-dabbrev
-     try-expand-dabbrev-all-buffers
-     try-expand-dabbrev-from-kill
-     yas/hippie-try-expand
-     try-complete-file-name-partially
-     try-complete-file-name
-     try-complete-lisp-symbol-partially
-     try-complete-lisp-symbol))
-
 ;;automatically close brackets, quotes, etc when typing
 (setq skeleton-pair t)
 (global-set-key "[" 'skeleton-pair-insert-maybe)
@@ -255,12 +238,6 @@
                 tags-file-name
                 register-alist)))
 ;; 				saved-window-configuration)))
-
-;; (defvar saved-window-configuration nil "window-configuration oject for desktop-mode")
-;; (add-hook 'desktop-save-hook
-;; 		  (lambda() (setq saved-window-configuration (current-window-configuration))))
-;; (add-hook 'desktop-after-read-hook
-;; 		  (lambda() (set-window-configuration saved-window-configuration)))
 
 (when is-win32
   ; make the ugly \m at end of line go away
@@ -413,35 +390,6 @@ replacing matching strings to a specific path"
 		(message "Buffer '%s' is not visiting a file!" name)
 	  (progn 	(copy-file filename newname 1) 	(delete-file filename) 	(set-visited-file-name newname) 	(set-buffer-modified-p nil) 	t))))
 
-
-(defvar my-key-pairs
-      '((?! ?1) (?@ ?2) (?# ?3) (?$ ?4) (?% ?5)
-        (?^ ?6) (?& ?7) (?* ?8) (?( ?9) (?) ?0)
-         (?\" ?') (?{ ?[) (?} ?])         ; (?| ?\\) (?- ?_)
-        ))
-
-(defvar key-swapped 0)
-(defun swap-key ()
-  (if (eq key-swapped 0) (my-key-swap my-key-pairs) (my-key-restore my-key-pairs)))
-
-(defun my-key-swap (key-pairs)
-  (setq key-swapped 1)
-  (if (eq key-pairs nil)
-      (message "Keyboard zapped!! ")
-      (progn
-        (keyboard-translate (caar key-pairs)  (cadar key-pairs))
-        (keyboard-translate (cadar key-pairs) (caar key-pairs))
-        (my-key-swap (cdr key-pairs)))))
-
-(defun my-key-restore (key-pairs)
-  (setq key-swapped 0)
-  (if (eq key-pairs nil)
-      (message "Keyboard restored!! ")
-      (progn
-        (keyboard-translate (caar key-pairs)  (caar key-pairs))
-        (keyboard-translate (cadar key-pairs) (cadar key-pairs))
-        (my-key-restore (cdr key-pairs)))))
-
 ;; by Nikolaj Schumacher, 2008-10-20. Released under GPL.
 (defun semnav-up (arg)
   (interactive "p")
@@ -478,12 +426,6 @@ replacing matching strings to a specific path"
 
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
   (flet  ((one-window-p (&optional nomini all-frames) t)) ad-do-it))
-;;   (let (orig-one-window-p)
-;;     (fset 'orig-one-window-p (symbol-function 'one-window-p))
-;;     (fset 'one-window-p (lambda (&optional nomini all-frames) t))
-;;     (unwind-protect
-;;         ad-do-it
-;;       (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
 (defadvice compile (before my-compile activate)
   (save-buffer))
@@ -498,14 +440,6 @@ replacing matching strings to a specific path"
 (defadvice vc-version-diff (around my-vc-version-diff activate)
   "Don't shrink buffer when displaying vc-diff !!"
   (flet ((shrink-window-if-larger-than-buffer ())) ad-do-it))
-
-;; (defadvice log-edit-done (around my-log-edit-done activate)
-;;   "Don't kill window when after log message!!"
-;;   (flet ((delete-window ())) ad-do-it))
-
-;; (defadvice log-edit-hide-buf (before my-log-edit-hide-buf activate)
-;;   "Don't kill window when after log message!!"
-;; (message "here") )
 
 (defun fullscreen ()
   "toggles whether the currently selected frame consumes the entire
@@ -769,54 +703,6 @@ replacing matching strings to a specific path"
   ;; "rename frame to NAME"
   ;; (interactive "sName: ")
   ;; (modify-frame-parameters nil '((title . name))))
-
-;(defun match-paren (arg)
-;  "Go to the matching paren if on a paren; otherwise insert %."
-;  (interactive "p")
-;  (cond ((looking-at "\\s\(") (forward-list) (backward-char))
-;    ((looking-at "\\s\)") (forward-char) (backward-list))
-;    (t (self-insert-command (or arg 1)))))
-;
-;(defun compile-autoclose (buffer string)
-;  (message "here")
-;  (cond ((string-match "finished" string)
-;         (message "Build maybe successful: closing window.")
-;         (run-with-timer 10 nil '(lambda()
-;                                  (bury-buffer buffer)
-;                         (replace-buffer-in-windows buffer))))
-;        (t
-;         (message "Compilation exited abnormally: %s" string))))
-;
-;(setq compilation-exit-autoclose
-;      (lambda (status code msg)
-;        ;; If M-x compile exists with a 0
-;        (when (and (eq status 'exit) (zerop code))
-;          ;; then bury the *compilation* buffer, so that C-x b doesn't go there
-;          (bury-buffer "*compilation*")
-;          ;; and return to whatever were looking at before
-;          (replace-buffer-in-windows "*compilation*")
-;          (message "Compilation successful!"))
-;        ;; Always return the anticipated result of
-;        ;; compilation-exit-message-function
-;        (cons "" code)))
-;(setq compilation-exit-message-function compilation-exit-autoclose)
-
-
-;; Close the compilation window if there was no error at all.
-;; (add-hook 'compilation-finish-functions 'compile-autoclose)
-;; (defun compile-autoclose (buffer string)
-;;    (cond  ((and (string-match "compilation" (buffer-name buffer))
-;;            (string-match "finished" string))
-;;           (message "Compilation successful! Closing window...")
-;;           (sit-for 5)
-;;           (bury-buffer buffer)
-;;           (replace-buffer-in-windows buffer)
-;;           (message "Compilation successful!"))
-;;          (t
-;;           (message ""))))
-
-
-;=====================================================
 
 ; Put autosave files (ie #foo#) in one place, *not*
 ;; scattered all over the file system!
