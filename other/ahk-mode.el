@@ -339,8 +339,9 @@ Key bindings:
   (setq major-mode 'ahk-mode
 	mode-name "AHK"
 	local-abbrev-table ahk-mode-abbrev-table
-	abbrev-mode t
-	indent-region-function 'ahk-indent-region)
+	abbrev-mode t)
+  (set (make-local-variable 'indent-region-function)
+	   'ahk-indent-region)
 
   (setq font-lock-defaults '((ahk-mode-font-lock-keywords)))
   (setq font-lock-keywords-case-fold-search t)
