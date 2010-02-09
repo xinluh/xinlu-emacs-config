@@ -765,6 +765,19 @@ replacing matching strings to a specific path"
   (set-face-attribute 'default (selected-frame) :height 120))
 
 
+(defvar closed-files (list))
+
+(defun track-closed-file ()
+  (message buffer-file-name)
+  (and buffer-file-name
+	   (add-to-list 'closed-files buffer-file-name)))
+
+(defun last-closed-files ()
+  (interactive)
+  (find-file (ido-completing-read "Last closed: " closed-files)))
+
+(add-hook 'kill-buffer-hook 'track-closed-file)
+	 
 ;; (defun rename-frame (name)
   ;; "rename frame to NAME"
   ;; (interactive "sName: ")
