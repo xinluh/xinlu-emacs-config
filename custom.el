@@ -192,9 +192,6 @@
 (define-key isearch-mode-map (kbd "C-v") ;yank in current word
   (lambda () (interactive) (save-excursion (skip-syntax-backward "w_")
 		   (isearch-yank-internal (lambda () (skip-syntax-forward "w_") (point))))))
-(define-key isearch-mode-map (kbd "C-y") ;yank in current word
-  (lambda () (interactive)
-	(isearch-yank-internal (lambda () (region-beginning) (region-end)))))
 ;; (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
 ;; (defun my-goto-match-beginning ()
 ;;     (when isearch-forward (goto-char isearch-other-end)))
@@ -273,11 +270,11 @@
 (defun comment-and-go-down ()
   "Comments the current line and goes to the next one" (interactive)
   (condition-case nil (comment-region (point-at-bol) (point-at-eol)) (error nil))
-  (next-line 1))
+  (forward-line 1))
 (defun uncomment-and-go-up ()
   "Uncomments the current line and goes to the previous one" (interactive)
   (condition-case nil (uncomment-region (point-at-bol) (point-at-eol)) (error nil))
-  (next-line -1))
+  (forward-line -1))
 
 (defun indent-or-expand (arg)
   "Either indent according to mode, or expand the word preceding point."
@@ -363,8 +360,8 @@ replacing matching strings to a specific path"
 (defun delete-frame-or-exit ()
   "Delete frame if more than one frame are present; otherwise exit emacs"
   (interactive)
-    (if (= (list-length (frame-list)) 1)
-        (save-buffers-kill-emacs) (delete-frame)))
+  (if (= (length (frame-list)) 1)
+	  (save-buffers-kill-emacs) (delete-frame)))
 
 (defun rename-file-and-buffer (new-name)
   "Renames both current buffer and file it's visiting to NEW-NAME."
@@ -607,17 +604,6 @@ replacing matching strings to a specific path"
    (format
 	"find %s -type f  -name \"*.cpp\" -print   -or   -name \"*.hpp\" -print | etags -"
 	dir-name)))
-
-(defun rename-file-and-buffer (new-name)
-  "Renames both current buffer and file it's visiting to NEW-NAME."
-  (interactive "sNew name: ")
-  (let ((name (buffer-name))
-		(filename (buffer-file-name)))
-	(if (not filename)
-		(message "Buffer '%s' is not visiting a file!" name)
-	  (if (get-buffer new-name)
-		  (message "A buffer named '%s' already exists!" new-name)
-		(progn 	 (rename-file name new-name 1) 	 (rename-buffer new-name) 	 (set-visited-file-name new-name) 	 (set-buffer-modified-p nil)))))) ;;
 
 (defun home-quick-set ()
   (interactive)
