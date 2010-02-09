@@ -32,6 +32,9 @@
 (autoload 'svn-status "psvn")
 (autoload 'folding-mode "folding" "Folding mode" t)
 
+(autoload 'magit-status "magit" nil t)
+(setq magit-git-executable "git.cmd"))
+   
 ;; (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
 
 ;; (require 'key-chord)
