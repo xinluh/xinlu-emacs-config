@@ -13,6 +13,66 @@
 (when is-win32
   (setq image-dired-external-viewer  "D:/Programs/IrfanView/i_view32.exe"))
 
+(defun dired-do-open-files ()
+  "Open marked or current file in dired buffer with proper file
+  association using the 'open' program"
+  (interactive)
+  (let (files)
+    (if (= (length (dired-get-marked-files)) 0)
+        (setq files (dired-get-filename))
+	  (setq files (mapconcat (function (lambda (x) (concat "\"" x "\"")))
+							 (dired-get-marked-files) " ")))
+    (shell-command (concat "open-cyg " files))))
+
+(defun dired-find-multiple-file (&optional arg)
+  "Open each of the marked files, or the file under the point, or when prefix arg, the next N files "
+  (interactive "P")
+  (let* ((fn-list (dired-get-marked-files nil arg)))
+	(mapc 'find-file fn-list)))
+
+(defun dired-do-insert-subdir-maybe ()
+  "Insert current or marked lines in dired buffer just as dired-maybe-insert-subdir "
+  (interactive)
+  (if (= (length (dired-get-marked-files)) 0)
+	  (dired-maybe-insert-subdir (dired-get-filename))
+	(dired-map-over-marks-check (lambda()
+								  (dired-maybe-insert-subdir (dired-get-filename)  nil t) ) nil 'display t)
+	))
+
+(defun dired-do-get-size ()
+  "Use du to find out the total size of all marked files"
+  (interactive)
+  (let ((files (dired-get-marked-files)))
+    (message "Getting size of marked file(s)...")
+    (with-temp-buffer
+      (apply 'call-process "du" nil t nil "-sch" files)
+      (message "Size of marked files: %s"
+               (progn
+                 (re-search-backward "\\(^[0-9.]+[A-Za-z]*\\).*total$")
+				 (match-string 1))))))
+
+(defun dired-copy-filename-as-kill-newline (&optional arg)
+  "same as dired-copy-filename-as-kill but use newline instead of space as separator"
+  (interactive "P")
+  (let ((string
+         (or (dired-get-subdir)
+             (mapconcat (function identity)
+                        (if arg
+                            (cond ((zerop (prefix-numeric-value arg))
+                                   (dired-get-marked-files))
+                                  ((consp arg)
+                                   (dired-get-marked-files t))
+                                  (t
+                                   (dired-get-marked-files
+									'no-dir (prefix-numeric-value arg))))
+                          (dired-get-marked-files 'no-dir))
+                        "\n"))))
+    (if (eq last-command 'kill-region)
+		(kill-append string nil)
+      (kill-new string))
+	(message "Filenames copied to kill ring.")))
+
+
 (defun my-dired-mode-hook()
   (setq truncate-lines t)
   (when (require 'wdired nil t)
@@ -23,7 +83,7 @@
   (local-set-key (kbd "o") 'dired-display-file)
   (local-set-key (kbd "W") 'dired-copy-filename-as-kill-newline)
   (local-set-key (kbd "\\") 'dired-do-get-size)
-  (local-set-key (kbd "C-\`") 'dired-up-directory)
+  (local-set-key (kbd "\`") 'dired-up-directory)
   (local-set-key (kbd "C-s") 'dired-isearch-forward)
   (local-set-key (kbd "I") 'dired-do-insert-subdir-maybe)
   (local-set-key (kbd "j") 'dired-isearch-forward) ; was dired-do-goto-line
