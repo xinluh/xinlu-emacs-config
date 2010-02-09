@@ -699,7 +699,6 @@ replacing matching strings to a specific path"
 (defvar closed-files (list))
 
 (defun track-closed-file ()
-  (message buffer-file-name)
   (and buffer-file-name
 	   (add-to-list 'closed-files buffer-file-name)))
 
