@@ -70,9 +70,6 @@
 (setq default-tab-width 4)
 (setq view-read-only t) ;enter view mode automatically when file is readonly
 (ansi-color-for-comint-mode-on)
-;(add-hook 'longlines-mode-hook 'longlines-show-hard-newlines)
-(add-hook 'longlines-mode-hook (lambda() (setq fill-column 90)))
-(add-hook 'longlines-mode-off-hook 'longlines-unshow-hard-newlines)
 (add-hook 'auto-fill-mode-hook (lambda() (message "Auto-Fill mode toggled")))
 (setq-default truncate-lines t)
 ;(setq eldoc-echo-area-use-multiline-p nil)
