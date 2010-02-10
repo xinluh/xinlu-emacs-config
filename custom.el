@@ -46,6 +46,7 @@
 (setq ido-use-filename-at-point nil)
 (setq ido-enable-flex-matching t)
 (setq ido-max-prospects 8)
+(setq ido-max-work-file-list 50)
 (setq ido-save-directory-list-file (concat emacsd-dir "personal/.ido.last"))
 (define-key ido-buffer-completion-map (kbd "<f3>") 'ido-enter-find-file)
 (setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*"
