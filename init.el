@@ -1,4 +1,3 @@
-;(setq initial-frame-alist '((width . 160) (height . 60)))
 (defvar emacs-runned-once nil "whether .emacs file has been runned once")
 (defconst is-win32 (eq system-type 'windows-nt) "Running on windows")
 (defconst is-linux (or (eq system-type 'gnu/linux) (eq system-type 'linux))
@@ -15,16 +14,13 @@
 
 (add-to-list 'load-path emacsd-dir)
 (add-to-list 'load-path (concat emacsd-dir "other"))
-;(add-to-list 'load-path (concat emacsd-dir "w3m"))
-;(add-to-list 'load-path (concat emacsd-dir "g-client"))
 
 (require 'yasnippet) 
 (yas/initialize)
 (yas/load-directory (concat emacsd-dir "snippets"))
 
-(setq ahk-syntax-directory (concat emacsd-dir "other/ahk-syntax-files"))
 (autoload 'ahk-mode "ahk-mode")
-(add-to-list 'auto-mode-alist '("\\.ahk$" . ahk-mode))
+(setq ahk-syntax-directory (concat emacsd-dir "other/ahk-syntax-files"))
 
 (autoload 'cmd-mode "cmd-mode" "CMD mode." t)
 (autoload 'csharp-mode "csharp-mode")
@@ -35,11 +31,6 @@
 (autoload 'magit-status "magit" nil t)
 (when is-win32
   (setq magit-git-executable "git.cmd"))
-   
-;; (require 'key-chord)
-;; (key-chord-mode 1)
-;; (key-chord-define-global "hj"     'pager-page-down)
-;; (key-chord-define-global "jk"     'pager-page-up)
 
 (require 'pager)
 (require 'bm)
@@ -79,6 +70,7 @@
 (byte-compile-if-newer-and-load "my-tex")
 (byte-compile-if-newer-and-load "my-dired")
 
+;========== emacs server ==========
 (if (and is-win32 (file-exists-p "d:/Users/xinlu/Documents/"))
 	(setq server-auth-dir "d:/Users/xinlu/Documents/"))
 (setq server-use-tcp t)
@@ -88,8 +80,7 @@
 ; maximize emacs on startup
 (when (not emacs-runned-once)
   (restore-windows-config)
-  (when is-win32   (fullscreen)))
-;; (toggle-fullscreen)
+  (when is-win32 (fullscreen)))
 
 ;; this need to be near the end of all customization so that the custom functions
 ;; are scanned.
@@ -98,18 +89,3 @@
 (setq emacs-runned-once t)
 
 (message "emacs is ready to go!")
-
-
-;needed on Windows, otherwise My Documents folder is not recognized
-;put last, as this will cause an error and stop evaluation
-;(when is-win32
-;  (setenv "HOME" home-dir)
-;)
-
-;(setq emacs-load-start-time (current-time))
-;
-;(when (require 'time-date nil t)
-;  (message "Emacs startup time: %d seconds"
-;		   (time-to-seconds (time-since emacs-load-start-time))))
-;
-;) ; when (not load-once)

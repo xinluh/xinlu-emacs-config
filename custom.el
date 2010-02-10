@@ -739,6 +739,6 @@
 (defun vcs-start ()
   (interactive)
   (let ((backend (vc-backend (buffer-file-name))))
-	(when (string-equal backend "SVN") (svn-status))
+	(when (string-equal backend "SVN") (svn-status default-directory))
 	(when (string-equal backend "Git") (magit-status default-directory))
 	(when (string-equal backend "CVS") (cvs-examine default-directory nil))))
