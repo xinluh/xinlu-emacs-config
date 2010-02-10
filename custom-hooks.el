@@ -88,9 +88,26 @@
 (defun my-lisp-mode-hook ()
   (my-programming-mode-hook)
   (eldoc-mode t)
+  (local-set-key (kbd "C-\\")  'lisp-complete-symbol)
   (local-set-key [f5] (lambda() (interactive)
+						(save-buffer)
 						(eval-buffer)
 						(message "Buffer evaluated")))
+
+  ; pretty lambda
+  (font-lock-add-keywords
+   nil `(("(?\\(lambda\\>\\)"
+          (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil)))))
+  
+  ;If you're saving an elisp file, likely the .elc is no longer valid.
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook
+            (lambda ()
+              (if (file-exists-p (concat buffer-file-name "c"))
+                  (delete-file (concat buffer-file-name "c")))))
+  
 )
 (add-hook 'lisp-mode-hook 'my-lisp-mode-hook)
 (add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-hook)
