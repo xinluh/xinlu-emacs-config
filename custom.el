@@ -95,7 +95,6 @@
 (add-to-list 'auto-mode-alist '("\\.cmd$" . cmd-mode))
 (add-to-list 'auto-mode-alist '("\\.bat$" . cmd-mode))
 (add-to-list 'auto-mode-alist '("\\.ahk$" . ahk-mode))
-(setq ahk-syntax-directory (concat emacsd-dir "Syntax/"))
 (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -print0 | xargs -0 -e grep -nH -e ")
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)

@@ -22,7 +22,7 @@
 (yas/initialize)
 (yas/load-directory (concat emacsd-dir "snippets"))
 
-(setq ahk-syntax-directory (concat emacsd-dir "Syntax/"))
+(setq ahk-syntax-directory (concat emacsd-dir "other/ahk-syntax-files"))
 (autoload 'ahk-mode "ahk-mode")
 (add-to-list 'auto-mode-alist '("\\.ahk$" . ahk-mode))
 
@@ -36,16 +36,11 @@
 (when is-win32
   (setq magit-git-executable "git.cmd"))
    
-;; (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
-
 ;; (require 'key-chord)
 ;; (key-chord-mode 1)
 ;; (key-chord-define-global "hj"     'pager-page-down)
 ;; (key-chord-define-global "jk"     'pager-page-up)
 
-;(require 'w3m-load)
-;; (require 'grep-edit)
-;(load-library "g")
 (require 'pager)
 (require 'bm)
 (require 'dired-isearch)
