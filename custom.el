@@ -39,7 +39,7 @@
 (setq ido-enable-flex-matching t)
 (setq ido-max-prospects 8)
 (setq ido-save-directory-list-file (concat emacsd-dir "personal/.ido.last"))
-
+(define-key ido-buffer-completion-map (kbd "<f3>") 'ido-enter-find-file)
 (setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*"
 						   "^\\*tramp" "*Completions*"
 						   "^\\*Ido" "\\*shell\\*" "\\*Help"
@@ -152,7 +152,7 @@
 (global-set-key (kbd "<f2> 2")	(lambda() (interactive) (select-window (get-window-at-corner 2))))
 (global-set-key (kbd "<f2> 3")	(lambda() (interactive) (select-window (get-window-at-corner 4))))
 (global-set-key [f3]			'ido-switch-buffer)
-(global-set-key [M-f3]			'ido-find-file)
+(global-set-key [M-f3]			'ido-switch-buffer-other-window)
 (global-set-key [C-f3]			'insert-path)
 (global-set-key [S-f3]			'ffap)
 (global-set-key [f4]			'yas/expand)
