@@ -109,6 +109,7 @@
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 (global-set-key (kbd "C-;")     'dabbrev-expand)
 (global-set-key (kbd "C-c m")   'imenu-selection-buffer)
+(global-set-key (kbd "C-c g")    'rgrep)
 (global-set-key "\M-m"          'extend-selection) ;was newline-and-indent
 (global-set-key "\C-z"          'undo)
 (global-set-key "\C-v"          'yank)
@@ -159,6 +160,7 @@
 (global-set-key [f6]			'shell-command-mod)
 (global-set-key [C-f6]			'shell)
 (global-set-key [f7]			'next-error)
+(global-set-key [S-f7]			'previous-error)
 (global-set-key [f8]	        'dired)
 (global-set-key [C-f8]	        'svn-status)
 (global-set-key [C-f9]	        'highlight-symbol-at-point)
