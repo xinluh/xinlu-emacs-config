@@ -173,7 +173,7 @@
 (global-set-key [f7]			'next-error)
 (global-set-key [S-f7]			'previous-error)
 (global-set-key [f8]	        'dired)
-(global-set-key [C-f8]	        'svn-status)
+(global-set-key [C-f8]	        'vcs-start)
 (global-set-key [C-f9]	        'highlight-symbol-at-point)
 (global-set-key [f9]	        'highlight-symbol-next)
 (global-set-key [S-f9]	        'highlight-symbol-prev)
@@ -735,3 +735,10 @@
           "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
           "culpa qui officia deserunt mollit anim id est laborum."))
+
+(defun vcs-start ()
+  (interactive)
+  (let ((backend (vc-backend (buffer-file-name))))
+	(when (string-equal backend "SVN") (svn-status))
+	(when (string-equal backend "Git") (magit-status default-directory))
+	(when (string-equal backend "CVS") (cvs-examine default-directory nil))))
