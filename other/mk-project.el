@@ -800,3 +800,23 @@ selection of the file. See also: `project-index',
 (provide 'mk-project)
 
 ;;; mk-project.el ends here
+
+;;; my-addition:
+(defun project-find-file-ido-in-dir ()
+  "Find fine using ido in the basedir of the project being prompted. This does not load the project."
+  (interactive)
+  (let ((name (ido-completing-read "Project Name (ido): " (mk-proj-names)))
+	  (proj-config)
+	  (basename))
+  (setq proj-config (mk-proj-find-config name))
+  (labels ((config-val (key)
+					   (if (assoc key proj-config)
+						   (car (cdr (assoc key proj-config)))
+						 nil))
+           (maybe-set-var (var &optional fn)
+						  (let ((proj-var (intern (concat "mk-proj-" (symbol-name var))))
+								(val (config-val var)))
+							(when val (setf (symbol-value proj-var) (if fn (funcall fn val) val))))))
+
+	(setq basename (expand-file-name (config-val 'basedir)))
+	(ido-find-file-in-dir basename))))
