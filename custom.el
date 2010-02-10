@@ -38,7 +38,7 @@
 (setq ido-use-filename-at-point nil)
 (setq ido-enable-flex-matching t)
 (setq ido-max-prospects 8)
-(setq ido-save-directory-list-file "~/.emacs.d/.ido.last")
+(setq ido-save-directory-list-file (concat emacsd-dir "personal/.ido.last"))
 
 (setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*"
 						   "^\\*tramp" "*Completions*"
@@ -94,6 +94,7 @@
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)
 (setq tramp-default-method "ssh")
+(setq tramp-persistency-file-name (concat emacsd-dir "personal/tramp"))
 (setq dabbrev-case-fold-search t)
 
 (require 'psvn)

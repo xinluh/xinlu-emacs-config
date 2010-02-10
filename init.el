@@ -60,6 +60,7 @@
 (setq browse-kill-ring-quit-action 'save-and-restore)
 
 (require 'smex)
+(setq smex-save-file (concat emacsd-dir "personal/smex.save"))
 
 (when is-emacs21 (require 'prev-next-buffer))
 
