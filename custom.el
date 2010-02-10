@@ -110,7 +110,11 @@
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 (global-set-key (kbd "C-;")     'dabbrev-expand)
 (global-set-key (kbd "C-c m")   'imenu-selection-buffer)
-(global-set-key (kbd "C-c g")    'rgrep)
+(global-set-key (kbd "C-c g")   'rgrep)
+(global-set-key (kbd "C-c p p") 'project-load)
+(global-set-key (kbd "C-c p u") 'project-unload)
+(global-set-key (kbd "C-c p d") 'project-dired)
+(global-set-key (kbd "C-c p s") 'project-status)
 (global-set-key "\M-m"          'extend-selection) ;was newline-and-indent
 (global-set-key "\C-z"          'undo)
 (global-set-key "\C-v"          'yank)
