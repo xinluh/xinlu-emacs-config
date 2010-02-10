@@ -115,6 +115,7 @@
 (global-set-key (kbd "C-c p u") 'project-unload)
 (global-set-key (kbd "C-c p d") 'project-dired)
 (global-set-key (kbd "C-c p s") 'project-status)
+(global-set-key (kbd "C-c p f") 'project-find-file-ido-in-dir)
 (global-set-key "\M-m"          'extend-selection) ;was newline-and-indent
 (global-set-key "\C-z"          'undo)
 (global-set-key "\C-v"          'yank)
