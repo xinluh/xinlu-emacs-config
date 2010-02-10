@@ -4,29 +4,37 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;make the y or n suffice for a yes or no question
 (setq frame-title-format "%b %+%+ (Emacs)") ;; set emacs title to the document
 (set-scroll-bar-mode 'right )
-(when (not is-win32) (tool-bar-mode 0))  ;; don't like toolbar!
 (setq parens-require-spaces nil)
 (windmove-default-keybindings) ;use shift+up,down,etc. for changing window
+
+;; don't like toolbar! However disabling it mess up with maximizing windows on Windows
+;; therefore on Windows, this is set via registry instead
+(when (not is-win32) (tool-bar-mode 0))  
+
+;; ========================================
+;; settings so that windows will open the places I want 
+(if is-emacs23
+	(setq special-display-function 'my-display-buffer-23)
+  (setq special-display-function 'my-display-buffer))
+
 ; shown theses in separate frame
 (setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
 									 "*Completions*" "*Buffer List*"
 									 "*Ido Completions*" "*svn-process*"
 									 "*svn-log-edit*" "*Kill Ring*"
 									 "*imenu-select*"))
-(if is-emacs23
-	(setq special-display-function 'my-display-buffer-23)
-  (setq special-display-function 'my-display-buffer))
 (setq special-display-regexps '(".*"))
 (setq special-display-frame-alist '((height . 14)
                                   (width . 80)
                                   (unsplittable . t)
                                   (menu-bar-lines nil)))
+;; ========================================
+
 (add-hook 'after-make-frame-functions 'custom-face-all)
 (if (not emacs-runned-once) (custom-face-all))
+
 (setq fill-column 90)
 (icomplete-mode 1) ;shows completions in minibuffer
-(when is-win32 ;(setq w32-pass-alt-to-system t)
-      (setq w32-get-true-file-attributes t))
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (setq kill-emacs-query-functions
@@ -201,9 +209,10 @@
 ;; (defun my-goto-match-beginning ()
 ;;     (when isearch-forward (goto-char isearch-other-end)))
 
-;comcplete shortcut in minibuffer
+;completion shortcut in minibuffer
 (define-key minibuffer-local-completion-map (kbd "<f3>")
                           'complete-minibuffer-path)
+; insert current buffer name into minibuffer
 (define-key minibuffer-local-map [f3]
   (lambda () (interactive)
      (insert (buffer-name (window-buffer (minibuffer-selected-window))))))
@@ -297,7 +306,6 @@
 	  (indent-region (region-beginning)
 					 (region-end))
     (indent-according-to-mode)))
-;(indent-for-tab-command)))
 
 (defun duplicate-line ()
   "Clones the current line of text."
@@ -322,10 +330,9 @@
   (find-file (concat emacsd-dir "custom.el")))
 
 (defun insert-path (&optional arg)
-  "Inserts a path into the buffer with completion"
+  "Inserts a path into the buffer with completion and strip the path of tramp syntaxes"
   (interactive "p*")
   (let ((filename (ido-read-file-name "Insert Path: ")))
-	;; (if (not (null arg)) (setq filename (expand-file-name filename)))
 	(setq filename (replace-regexp-in-string
 					"^\\(/[a-z0-9]\\{2,5\\}:[-a-zA-Z0-9.]+:\\)" "" filename))
   (insert filename)))
@@ -344,23 +351,23 @@
        ".." d) if (file-exists-p (expand-file-name "Makefile" d))
        return d)) makefile-dir ))
 
-(defun complete-minibuffer-path ()
-  "Extension to the complete word facility of the minibuffer by
-replacing matching strings to a specific path"
-  (interactive)
-  (let ((directory) (found t))
-  (cond
-     ; just add new entries if needed; shortcut up to 4 letters will work
-     ((looking-back "j" 5 nil) (setq directory "D:/Desktop/"))
-     ((looking-back "k" 5 nil) (setq directory "D:/Documents/"))
-     ((looking-back "l" 5 nil) (setq directory (concat home-dir ".emacs.d/")))
-     ((looking-back "i" 5 nil) (setq directory "D:/Programs/"))
-     ((looking-back "o" 5 nil) (setq directory "D:/Documents/Visual Studio 2008/Projects/MusicDataBase/MusicLib/"))
-     (t (setq found nil)))
-  (cond (found (beginning-of-line)
-                (kill-line)
-                (insert directory))
-         (t (minibuffer-complete)))))
+;; (defun complete-minibuffer-path ()
+;;   "Extension to the complete word facility of the minibuffer by
+;; replacing matching strings to a specific path"
+;;   (interactive)
+;;   (let ((directory) (found t))
+;;   (cond
+;;      ; just add new entries if needed; shortcut up to 4 letters will work
+;;      ((looking-back "j" 5 nil) (setq directory "D:/Desktop/"))
+;;      ((looking-back "k" 5 nil) (setq directory "D:/Documents/"))
+;;      ((looking-back "l" 5 nil) (setq directory (concat home-dir ".emacs.d/")))
+;;      ((looking-back "i" 5 nil) (setq directory "D:/Programs/"))
+;;      ((looking-back "o" 5 nil) (setq directory "D:/Documents/Visual Studio 2008/Projects/MusicDataBase/MusicLib/"))
+;;      (t (setq found nil)))
+;;   (cond (found (beginning-of-line)
+;;                 (kill-line)
+;;                 (insert directory))
+;;          (t (minibuffer-complete)))))
 
 (defun delete-frame-or-exit ()
   "Delete frame if more than one frame are present; otherwise exit emacs"
@@ -432,9 +439,6 @@ replacing matching strings to a specific path"
 (defadvice compile (before my-compile activate)
   (save-buffer))
 
-(defadvice TeX-command-master (before my-TeX-command-master activate)
-  (save-buffer))
-
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (flet ((process-list ())) ad-do-it))
@@ -496,22 +500,20 @@ replacing matching strings to a specific path"
 
 (defun my-display-buffer (buf)
   "put all buffers in a window other than the one in the bottom right"
+  "for emacsen 22 or below"
   (if (member (buffer-name buf) special-display-buffer-names)
 	  (display-special-buffer buf)
 	  (progn
 		(let ((pop-up-windows t)
 			  (windows (delete (get-window-at-corner 4)
                          (delete (minibuffer-window) (window-list)))))
-;; 		(if (<= 1 (length windows))
-;; 			(progn
-;; 			  (select-window (car windows))
-;; 			  (split-window-vertically)))
 		  (message (buffer-name (window-buffer (car windows))))
 		  (set-window-buffer (car (cdr windows)) buf)
 		  (car (cdr windows))))))
 
 (defun my-display-buffer-23 (buf &optional args)
   "put all buffers in a window other than the one in the bottom right"
+  "for emacsen 23 or above"
   (if (member (buffer-name buf) special-display-buffer-names)
 	  (display-special-buffer buf)
 	  (progn
@@ -519,11 +521,6 @@ replacing matching strings to a specific path"
 			  (windows (delete (minibuffer-window) (window-list))))
 		  (if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
 			  (setq windows (delete (get-window-at-corner 4) windows)))
-			  ;; 		(if (<= 1 (length windows))
-;; 			(progn
-;; 			  (select-window (car windows))
-;; 			  (split-window-vertically)))
-		  ;; (message (buffer-name (window-buffer (car windows))))
 		  (set-window-buffer (car (cdr windows)) buf)
 		  (car (cdr windows))))))
 
@@ -621,17 +618,19 @@ replacing matching strings to a specific path"
   (set-face-attribute 'default (selected-frame) :height 120))
 
 
+;=============================
+; provides simple mechanism for recovering accidentally closed files
 (defvar closed-files (list))
 
 (defun track-closed-file ()
   (and buffer-file-name
 	   (add-to-list 'closed-files buffer-file-name)))
+(add-hook 'kill-buffer-hook 'track-closed-file)
 
 (defun last-closed-files ()
   (interactive)
   (find-file (ido-completing-read "Last closed: " closed-files)))
-
-(add-hook 'kill-buffer-hook 'track-closed-file)
+;==============================
 
 
 (define-derived-mode imenu-selection-mode fundamental-mode "imenu"

@@ -1,8 +1,10 @@
 (setq dired-listing-switches "-alh") ; human readable sizes
+  
 (when is-win32 (setq ls-lisp-ignore-case t)
       ;(setq ls-lisp-verbosity (delq 'uid ls-lisp-verbosity))
       (setq ls-lisp-verbosity (delq 'gid ls-lisp-verbosity))
-      (setq ls-lisp-dirs-first t))
+      (setq ls-lisp-dirs-first t)
+	  (setq w32-get-true-file-attributes t))
 (setq dired-dwim-target t)
 ;; (put 'dired-find-alternate-file 'disabled nil)
 

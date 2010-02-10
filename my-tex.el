@@ -16,6 +16,9 @@
   ;; add miktex to path
   (add-to-list 'exec-path "D:/Programs/miktex/miktex/bin")
   (setenv "PATH" (concat "D:/Programs/miktex/miktex/bin;" (getenv "PATH")))
+
+(defadvice TeX-command-master (before my-TeX-command-master activate)
+  (save-buffer))
   
 (defun guess-TeX-master (filename)
   "Guess the master file for FILENAME from currently open .tex files."
