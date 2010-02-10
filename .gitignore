@@ -5,3 +5,4 @@
 /g-client/*
 *.elc
 /personal/*
+/personal
