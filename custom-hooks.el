@@ -12,7 +12,7 @@
 
 (defun my-c-mode-hook ()
   (my-programming-mode-hook)
-  (setq c-basicc-indent 4)
+  ;; (setq c-basic-indent 4)
 ;;   (local-set-key [f5] (lambda () (interactive)
 ;; 			(cd (get-above-makefile-directory))
 ;;             (compile compile-command)))
