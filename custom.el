@@ -230,7 +230,9 @@
 (setq desktop-save 'ask)
 (setq desktop-restore-eager 4)
 (setq desktop-files-not-to-save "----------------------------------")
-(desktop-save-mode 1)
+(setq desktop-dirname (concat emacsd-dir "personal/"))
+(setq desktop-path '("~" "."))
+(add-to-list 'desktop-path (concat emacsd-dir "personal/"))
 
 ;; save a bunch of variables to the desktop file
 ;; for lists specify the len of the maximal saved data also
@@ -246,9 +248,11 @@
                 (regexp-search-ring       . 20)
                 (search-ring              . 20)
                 (shell-command-history    . 50)
+				(closed-files             . 20)
                 tags-file-name
                 register-alist)))
 ;; 				saved-window-configuration)))
+(desktop-save-mode 1)
 
 (when is-win32
   ; make the ugly \m at end of line go away
