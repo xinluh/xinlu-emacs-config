@@ -628,6 +628,7 @@
 
 (defun track-closed-file ()
   (and buffer-file-name
+	   (or (delete buffer-file-name closed-files) t)
 	   (add-to-list 'closed-files buffer-file-name)))
 (add-hook 'kill-buffer-hook 'track-closed-file)
 
