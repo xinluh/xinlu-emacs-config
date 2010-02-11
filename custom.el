@@ -37,9 +37,9 @@
 (icomplete-mode 1) ;shows completions in minibuffer
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-(setq kill-emacs-query-functions
-      (cons (lambda () (yes-or-no-p "Really kill Emacs? "))
-            kill-emacs-query-functions))
+(if (not emacs-runned-once)
+	(add-to-list 'kill-emacs-query-functions
+      (lambda () (yes-or-no-p "Really kill Emacs? "))))
 
 (ido-mode t)
 (setq ido-create-new-buffer 'always)
