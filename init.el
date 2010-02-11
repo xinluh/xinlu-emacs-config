@@ -59,9 +59,10 @@
 
 (defun byte-compile-if-newer-and-load (file)
    "Byte compile file.el if newer than file.elc"
-    (if (or (file-newer-than-file-p (concat file ".el") (concat file ".elc"))
-			(not (file-exists-p (concat file ".elc"))))
-		(byte-compile-file (concat file ".el") t)
+   (let ((path (concat emacsd-dir file)))
+    (if (or (file-newer-than-file-p (concat path ".el") (concat path ".elc"))
+			(not (file-exists-p (concat path ".elc"))))
+		(byte-compile-file (concat path ".el") t))
 	    (load file)))
 
 (byte-compile-if-newer-and-load "custom-faces")
