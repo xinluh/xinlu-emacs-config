@@ -59,7 +59,8 @@
 
 (defun byte-compile-if-newer-and-load (file)
    "Byte compile file.el if newer than file.elc"
-    (if (file-newer-than-file-p (concat file ".el") (concat file ".elc"))
+    (if (or (file-newer-than-file-p (concat file ".el") (concat file ".elc"))
+			(not (file-exists-p (concat file ".elc"))))
 		(byte-compile-file (concat file ".el") t)
 	    (load file)))
 
