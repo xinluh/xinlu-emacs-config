@@ -227,6 +227,7 @@
 
 ;; save a list of open files in ~/.emacs.desktop
 ;; save the desktop file automatically if it already exists
+(require 'desktop)
 (setq desktop-save 'ask)
 (setq desktop-restore-eager 4)
 (setq desktop-files-not-to-save "----------------------------------")
