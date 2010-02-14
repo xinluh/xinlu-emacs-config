@@ -111,6 +111,12 @@
 (setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
 
+(autoload 'magit-status "magit" nil t)
+(when is-win32
+  (setq magit-git-executable "git.cmd"))
+(setq magit-commit-all-when-nothing-staged t)
+
+
 ; -----keyboard bindings-----
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 (global-set-key (kbd "C-;")     'dabbrev-expand)

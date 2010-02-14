@@ -28,10 +28,6 @@
 (autoload 'svn-status "psvn")
 (autoload 'folding-mode "folding" "Folding mode" t)
 
-(autoload 'magit-status "magit" nil t)
-(when is-win32
-  (setq magit-git-executable "git.cmd"))
-
 (require 'pager)
 (require 'bm)
 (require 'dired-isearch)
