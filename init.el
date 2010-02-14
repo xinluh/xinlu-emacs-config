@@ -39,7 +39,7 @@
 (require 'dabbrev-expand-multiple)
 
 (require 'mk-project)
-(if (file-exists-p "personal/projects.el")
+(if (file-exists-p (concat emacsd-dir "personal/projects.el"))
 	(load (concat emacsd-dir "personal/projects.el")))
 
 (require 'dired-details)
