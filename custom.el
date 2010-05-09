@@ -140,6 +140,7 @@
 (global-set-key (kbd "C--")     (lambda () (interactive) (cua-set-mark 5)))
 (global-set-key (kbd "C-c o")   'occur)
 (global-set-key (kbd "C-c i")   'insert-path)
+(global-set-key (kbd "C-c I")   'insert-path-short)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-j")     'backward-char) ; was indent-new-comment-line
 (global-set-key (kbd "M-l")     'forward-char)  ; was downcase-word
@@ -347,6 +348,14 @@
 	(setq filename (replace-regexp-in-string
 					"^\\(/[a-z0-9]\\{2,5\\}:[-a-zA-Z0-9.]+:\\)" "" filename))
   (insert filename)))
+
+(defun insert-path-short (&optional arg)
+  "Inserts a path into the buffer with completion and strip the path of tramp syntaxes"
+  (interactive "p*")
+  (let ((filename (ido-read-file-name "Insert Path: ")))
+	(setq filename (replace-regexp-in-string
+					"^\\(/[a-z0-9]\\{2,5\\}:[-a-zA-Z0-9.]+:\\)" "" filename))
+	(insert (file-name-nondirectory filename))))
 
 (defun shell-command-mod
   (command &optional output-buffer error-buffer)
