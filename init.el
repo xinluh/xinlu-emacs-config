@@ -28,6 +28,9 @@
 (autoload 'svn-status "psvn")
 (autoload 'folding-mode "folding" "Folding mode" t)
 
+(add-to-list 'load-path (concat emacsd-dir "other/company-mode"))
+(autoload 'company-mode "company" nil t)
+
 (require 'pager)
 (require 'bm)
 (require 'dired-isearch)
