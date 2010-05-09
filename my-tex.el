@@ -105,3 +105,8 @@
   )
 ;; (add-hook 'tex-mode-hook 'my-tex-mode-hook)
 (add-hook 'TeX-mode-hook 'my-tex-mode-hook)
+
+(defadvice LaTeX-insert-item (around my-LaTeX-insert-item activate)
+  "Workaround for undesirable behavior when an item in latex ended with comment"
+  (let  ((LaTeX-insert-into-comments nil)) ad-do-it))
+
