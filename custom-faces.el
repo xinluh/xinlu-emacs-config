@@ -90,19 +90,19 @@
 					  :foreground "black")
 
   (set-face-attribute 'font-lock-builtin-face frame 
-					  :foreground "orchid")
+					  :foreground "#d82ca2")
   (set-face-attribute 'font-lock-comment-face frame 
-					  :foreground "Firebrick")
+					  :foreground "ForestGreen")
   (set-face-attribute 'font-lock-function-name-face frame
-					  :foreground "Blue1" )
+					  :foreground "#1610c1" )
   ;; :weight 'bold)
   (set-face-attribute 'font-lock-keyword-face frame 
-					  :foreground "Purple")
+					  :foreground "Red")
   (set-face-attribute 'font-lock-string-face frame 
-					  :foreground "RosyBrown")
+					  :foreground "#c77429")
   (set-face-attribute 'font-lock-type-face frame 
-					  :foreground "ForestGreen")
+					  :foreground "#931b81")
   (set-face-attribute 'font-lock-variable-name-face frame 
-					  :foreground "DarkGoldenrod")
+					  :foreground "#10b8d1")
 )
 ;; (custom-face-dark)
