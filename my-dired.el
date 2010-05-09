@@ -18,7 +18,12 @@
 (defun dired-do-cat-file ()
   "run 'cat' on the marked or current file; useful when visiting file is slow over tramp"
   (interactive)
-    (shell-command (concat "cat " (dired-get-filename 'no-dir))))
+  (shell-command (concat "cat " (dired-get-filename 'no-dir))))
+
+(defun dired-do-tail-file ()
+  "run 'tail' on the marked or current file; useful when visiting file is slow over tramp"
+  (interactive)
+  (shell-command (concat "tail -n 30 " (dired-get-filename 'no-dir))))
 
 (defun dired-do-open-files ()
   "Open marked or current file in dired buffer with proper file
@@ -89,6 +94,7 @@
   (local-set-key (kbd "C-o") 'dired-find-files-other-window)
   (local-set-key (kbd "o") 'dired-display-file)
   (local-set-key (kbd "c") 'dired-do-cat-file)
+  (local-set-key (kbd "c") 'dired-do-tail-file)
   (local-set-key (kbd "W") 'dired-copy-filename-as-kill-newline)
   (local-set-key (kbd "\\") 'dired-do-get-size)
   (local-set-key (kbd "\`") 'dired-up-directory)
