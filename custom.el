@@ -187,7 +187,7 @@
 (global-set-key [M-f9]	        'highlight-symbol-remove-all)
 (global-set-key [C-f10]	        'kmacro-start-macro)
 (global-set-key [f10]	        'kmacro-end-or-call-macro)
-(global-set-key [f11]	        'longlines-mode)
+(global-set-key [f11]	        'visual-line-mode)
 (global-set-key [M-f11]			'toggle-truncate-lines)
 (global-set-key [C-f11]			'auto-fill-mode)
 (global-set-key [f12]	        'google)
