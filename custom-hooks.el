@@ -147,3 +147,26 @@
   (local-set-key (kbd "f") 'next-error-follow-minor-mode)
   )
 (add-hook 'occur-mode-hook 'my-occur-mode-hook)
+
+(defun reb-query-replace (to-string)
+  "Replace current RE from point with `query-replace-regexp'."
+  (interactive
+   (progn (barf-if-buffer-read-only)
+		  (list (query-replace-read-to (reb-target-binding reb-regexp)
+									   "Query replace"  t))))
+  (reb-quit)
+  (switch-to-buffer reb-target-buffer)
+  (query-replace-regexp (reb-target-binding reb-regexp) to-string))
+
+(setq reb-re-syntax 'string)
+(defun my-re-builder-hook()
+  (local-set-key (kbd "M-n") 'reb-next-match)
+  (local-set-key (kbd "M-p") 'reb-prev-match)
+  (local-set-key (kbd "C-M-%") 'reb-query-replace)
+  (local-set-key (kbd "<escape>") 'reb-quit)
+  
+  ;; (reb-change-syntax 'string)
+
+ )
+(add-hook 'reb-mode-hook 'my-re-builder-hook)
+
