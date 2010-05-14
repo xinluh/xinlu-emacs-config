@@ -30,7 +30,7 @@
   (yas/minor-mode-on)
   (setq indent-tabs-mode nil)
   (setq c-basic-offset 4)
-  (c-subword-mode 1)
+  (subword-mode 1)
   (c-toggle-hungry-state 1)
   (c-set-offset 'substatement-open 0)
   (setq compilation-finish-functions 'my-compile-finish-function)
