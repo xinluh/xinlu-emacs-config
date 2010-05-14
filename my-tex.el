@@ -93,6 +93,7 @@
   (setq TeX-newline-function 'newline-and-indent)
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
+  (auto-fill-mode 1)
   ;; (setq-default TeX-master nil)
   
   (setq TeX-master (guess-TeX-master (buffer-file-name)))
