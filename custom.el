@@ -609,15 +609,22 @@
 	  (let ((mark-even-if-inactive t))
 		(indent-region (region-beginning) (region-end) nil))))
 
+(defvar ido-enable-replace-completing-read t
+  "If t, use ido-completing-read instead of completing-read if possible.")
 (defadvice completing-read (around my-completing-read-ido activate)
-  (if (boundp 'ido-cur-list)  ad-do-it
-	(setq ad-return-value
-		  (ido-completing-read
-		   prompt
-		   (all-completions "" collection predicate)
-		   nil require-match initial-input hist def))))
+  (if (or (not ido-enable-replace-completing-read)
+		  (boundp 'ido-cur-item))  ad-do-it
+	(let ((allcomp (all-completions "" collection predicate)))
+      (if allcomp
+          (setq ad-return-value
+                (ido-completing-read prompt
+									 allcomp
+									 nil require-match initial-input hist def))
+        ad-do-it))))
 ; need this so that the above advice will not screw up reading file names
 (setq read-file-name-function 'ido-read-file-name)
+(defadvice dired-do-rename (around my-dired-do-rename activate)
+  (let ((ido-enable-replace-completing-read nil)) ad-do-it))
 
 (defun build-tag-table (dir-name)
   "Create tag files"
