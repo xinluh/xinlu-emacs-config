@@ -6,3 +6,4 @@
 *.elc
 /personal/*
 /personal
+/semanticdb*

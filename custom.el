@@ -60,10 +60,25 @@
 									(if (> (frame-width) 150)
 										(split-window-horizontally arg)
 									  (split-window-vertically arg))))
-(which-function-mode t)
+;; (which-function-mode t)
 (goto-address-mode t)
 (setq resize-mini-windows nil)
 (setq cpp-face-type 'light)
+
+;-----CEDET stuff-----------
+(semantic-mode t)
+(global-ede-mode t)
+(global-semantic-decoration-mode 1)
+(global-semantic-stickyfunc-mode 1)
+;; (require 'semantic-gcc)
+(if is-win32
+(semantic-add-system-include "d:/cygwin/usr/include/ROOT/" 'c++-mode)
+(semantic-add-system-include "d:/Programs/Python/App/include/" 'python-mode)
+(semantic-add-system-include "d:/Programs/Python/App/Lib/" 'python-mode)
+
+(setq python-command "d:/Programs/Python/App/python.exe")
+(setq python-python-command "d:/Programs/Python/App/python.exe"))
+
 ;-----editing settings----
 (cua-mode t)
 (setq cua-prefix-override-inhibit-delay 0.5)
