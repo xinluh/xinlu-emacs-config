@@ -22,7 +22,7 @@
 									 "*Completions*" "*Buffer List*"
 									 "*Ido Completions*" "*svn-process*"
 									 "*svn-log-edit*" "*Kill Ring*"
-									 "*imenu-select*"))
+									 "*imenu-select*" "*Popup Help*"))
 (setq special-display-regexps '(".*"))
 (setq special-display-frame-alist '((height . 14)
                                   (width . 80)

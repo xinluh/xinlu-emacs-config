@@ -31,6 +31,11 @@
 (add-to-list 'load-path (concat emacsd-dir "other/company-mode"))
 (autoload 'company-mode "company" nil t)
 
+(add-to-list 'load-path (concat emacsd-dir "other/auto-complete"))
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories (concat emacsd-dir "personal/dict"))
+(ac-config-default)
+
 (require 'pager)
 (require 'bm)
 (require 'dired-isearch)

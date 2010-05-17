@@ -35,6 +35,8 @@
   (c-set-offset 'substatement-open 0)
   (setq compilation-finish-functions 'my-compile-finish-function)
 
+  (setq ac-sources '(ac-source-filename ac-source-yasnippet ac-source-semantic ac-source-semantic-raw))
+  
   (unless (file-exists-p "Makefile")
 	(set (make-local-variable 'compile-command)
 		 ;; emulate make's .c.o implicit pattern rule, but with
