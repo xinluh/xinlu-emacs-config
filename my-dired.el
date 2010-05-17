@@ -48,7 +48,7 @@
   (if (= (length (dired-get-marked-files)) 0)
 	  (dired-maybe-insert-subdir (dired-get-filename))
 	(dired-map-over-marks-check (lambda()
-								  (dired-maybe-insert-subdir (dired-get-filename)  nil t) ) nil 'display t)
+				  (dired-maybe-insert-subdir (dired-get-filename)  nil t) ) nil 'display t)
 	))
 
 (defun dired-do-get-size ()
@@ -105,6 +105,8 @@
   (local-set-key (kbd "ESC C-s") 'dired-isearch-forward-regexp)
   (local-set-key (kbd "ESC C-r") 'dired-isearch-backward-regexp)
   (local-set-key (kbd "<delete>") 'dired-do-delete)
+  (local-set-key (kbd "<")   'dired-prev-subdir)
+  (local-set-key (kbd ">")   'dired-next-subdir)
 ;;   (local-set-key "(" '(lambda () "sort by eXtension"
 ;; 						(interactive) (dired-sort-other (concat dired-listing-switches "G0"))))
   

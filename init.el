@@ -35,7 +35,7 @@
 (require 'bm)
 (require 'dired-isearch)
 (require 'highlight-symbol)
-(require 'dabbrev-expand-multiple)
+;; (require 'dabbrev-expand-multiple)
 
 (require 'mk-project)
 (if (file-exists-p (concat emacsd-dir "personal/projects.el"))

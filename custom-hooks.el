@@ -1,7 +1,7 @@
 (defun my-programming-mode-hook ()
   (local-set-key "\C-m" 'newline-and-indent)
-  (local-set-key [tab] 'indent-or-expand)
-  (custom-face-dark)
+  ;; (local-set-key [tab] 'indent-or-expand)
+  ;; (custom-face-dark)
   ; hightlight TODO: FIXME, marks
   (font-lock-add-keywords nil
   '(("\\<\\([t|T][o|O][d|D][o|O]:*\\)" 1 font-lock-warning-face prepend)

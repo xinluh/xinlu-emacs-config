@@ -74,6 +74,7 @@
 (setq scroll-step 1) ;smooth-scrolling
 (setq kill-whole-line t)
 (setq kill-read-only-ok t) ; don't beep when killing line in readonly buffer
+(setq kill-do-not-save-duplicates t)
 (show-paren-mode 1)
 (delete-selection-mode 1)
 (setq default-tab-width 4)
@@ -308,7 +309,7 @@
  (if (and
        (or (bobp) (= ?w (char-syntax (char-before))))
        (or (eobp) (not (= ?w (char-syntax (char-after))))))
-      (dabbrev-expand-multiple)
+      (dabbrev-expand)
     (smart-indent)))
 
 (defun smart-indent ()
@@ -352,7 +353,7 @@
 (defun insert-path-short (&optional arg)
   "Inserts a path into the buffer with completion and strip the path of tramp syntaxes"
   (interactive "p*")
-  (let ((filename (ido-read-file-name "Insert Path: ")))
+  (let ((filename (ido-read-file-name "Insert Filename: ")))
 	(setq filename (replace-regexp-in-string
 					"^\\(/[a-z0-9]\\{2,5\\}:[-a-zA-Z0-9.]+:\\)" "" filename))
 	(insert (file-name-nondirectory filename))))
@@ -466,6 +467,11 @@
 (defadvice vc-version-diff (around my-vc-version-diff activate)
   "Don't shrink buffer when displaying vc-diff !!"
   (flet ((shrink-window-if-larger-than-buffer ())) ad-do-it))
+
+;; (defadvice query-replace-regexp (before my-query-replace-regexp activate))
+  ;; (when (interactive-p)
+    ;; (ad-set-arg 0 (replace-regexp-in-string "(" "\\\\(" (ad-get-arg 0)))
+    ;; (ad-set-arg 0 (replace-regexp-in-string ")" "\\\\)" (ad-get-arg 0)))))
 
 (defun fullscreen ()
   "toggles whether the currently selected frame consumes the entire
