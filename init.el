@@ -51,6 +51,10 @@
 (require 'smex)
 (setq smex-save-file (concat emacsd-dir "personal/smex.save"))
 
+(require 'color-theme)
+(eval-after-load "color-theme"
+  '(progn (color-theme-initialize)))
+
 (when is-emacs21 (require 'prev-next-buffer))
 
 (setq custom-file (concat emacsd-dir ".emacs-custom.el"))

@@ -113,12 +113,12 @@
 (add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-hook)
 
 (defun my-html-mode-hook()
-  (custom-face-html)
+  ;; (custom-face-html)
 )
 (add-hook 'html-mode-hook 'my-html-mode-hook)
 
 (defun my-shell-mode-hook()
-  (custom-face-dark)
+  ;; (custom-face-dark)
   (local-set-key [up]          ; cycle backward through command history
 				 '(lambda () (interactive)
 					(if (comint-after-pmark-p)

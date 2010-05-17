@@ -63,7 +63,7 @@
 (which-function-mode t)
 (goto-address-mode t)
 (setq resize-mini-windows nil)
-(setq cpp-face-type 'dark)
+(setq cpp-face-type 'light)
 ;-----editing settings----
 (cua-mode t)
 (setq cua-prefix-override-inhibit-delay 0.5)
@@ -636,7 +636,7 @@
 
 (defun home-quick-set ()
   (interactive)
-  (custom-face-dark)
+  ;; (custom-face-dark)
   (set-face-attribute 'default (selected-frame) :height 120)
   ;; (w32-maximize-frame)
   (restore-windows-config))
