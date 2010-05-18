@@ -435,6 +435,23 @@
 		(message "Buffer '%s' is not visiting a file!" name)
 	  (progn 	(copy-file filename newname 1) 	(delete-file filename) 	(set-visited-file-name newname) 	(set-buffer-modified-p nil) 	t))))
 
+(defun send-email (recipient subject text)
+  "Send email with msmtp"
+  (with-temp-buffer
+	(insert (concat "Subject: " subject "\n\n"))
+	(insert text)
+	(call-process-region (point-min) (point-max) "msmtp" nil "temp" t "-C"
+						 (expand-file-name "~/.emacs.d/personal/msmtp.config") recipient)))
+
+(defun note-to-self ()
+  "Send region as email to myself"
+  (interactive)
+  (let ((text (buffer-substring-no-properties (region-beginning) (region-end)))
+		(subject (read-from-minibuffer "Subject: ")))
+	(message "Sending note as email...")
+	(send-email user-mail-address subject text)
+	(message "Sending note as email... Done")))
+
 ;; by Nikolaj Schumacher, 2008-10-20. Released under GPL.
 (defun semnav-up (arg)
   (interactive "p")
