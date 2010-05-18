@@ -1,0 +1,7 @@
+#name : function template
+#contributor : x
+# --
+(defun ${1:func_name} ()
+  "${2:doc}"
+  (interactive)
+    $0)
