@@ -183,7 +183,7 @@
 (global-set-key [M-f3]			'ido-switch-buffer-other-window)
 (global-set-key [C-f3]			'insert-path)
 (global-set-key [S-f3]			'ffap)
-(global-set-key [f4]			'yas/expand)
+;; (global-set-key [f4]			'yas/expand)
 (global-set-key [M-f4]			'delete-frame-or-exit)
 (global-set-key [S-f4]  		'bury-buffer)
 (global-set-key [C-f4]			'kill-this-buffer)

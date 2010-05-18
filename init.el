@@ -18,6 +18,9 @@
 (require 'yasnippet) 
 (yas/initialize)
 (yas/load-directory (concat emacsd-dir "snippets"))
+(setq yas/root-directory (concat emacsd-dir "snippets"))
+(setq yas/trigger-key "<f4>")
+(setq yas/prompt-functions '(yas/dropdown-prompt))
 
 (autoload 'ahk-mode "ahk-mode")
 (setq ahk-syntax-directory (concat emacsd-dir "other/ahk-syntax-files"))

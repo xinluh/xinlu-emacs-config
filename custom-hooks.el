@@ -27,7 +27,6 @@
   
 ;;   (setq compile-output-file nil "the output file for compilation")
 ;;   (make-variable-buffer-local 'compile-output-file)
-  (yas/minor-mode-on)
   (setq indent-tabs-mode nil)
   (setq c-basic-offset 4)
   (subword-mode 1)
