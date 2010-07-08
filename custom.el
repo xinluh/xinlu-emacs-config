@@ -214,11 +214,13 @@
 (global-set-key [C-f12]	        'browse-root-doc)
 (global-set-key (kbd "<pause>")  'view-mode)
 (global-set-key (kbd "<Scroll_Lock>")  'restore-windows-config)
+(global-set-key (kbd "<scroll>")  'restore-windows-config)
 (global-set-key (kbd "<apps>")  'smex)
 (global-set-key (kbd "<menu>")  'smex)
 (global-set-key [M-down] 'comment-and-go-down)
 (global-set-key [M-up] 'uncomment-and-go-up)
 (global-set-key (kbd "M-SPC") 'cua-set-mark)
+(global-set-key (kbd "C-/") 'comment-region)
 
 ; set saner keys for isearch-mode
 (define-key isearch-mode-map (kbd "C-o")  (lambda () (interactive)
