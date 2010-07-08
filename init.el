@@ -83,6 +83,9 @@
 (byte-compile-if-newer-and-load "my-tex")
 (byte-compile-if-newer-and-load "my-dired")
 
+; set some private variables
+(load (concat emacsd-dir "personal/personal.el"))
+
 ;========== emacs server ==========
 (if (and is-win32 (file-exists-p "d:/Users/xinlu/Documents/"))
 	(setq server-auth-dir "d:/Users/xinlu/Documents/"))
