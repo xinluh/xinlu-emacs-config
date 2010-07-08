@@ -37,7 +37,7 @@
 (add-to-list 'load-path (concat emacsd-dir "other/auto-complete"))
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories (concat emacsd-dir "personal/dict"))
-(ac-config-default)
+;; (ac-config-default)
 
 (require 'pager)
 (require 'bm)
