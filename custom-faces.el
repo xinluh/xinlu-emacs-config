@@ -114,7 +114,7 @@
       (cursor-color . "DarkOliveGreen4")
       (foreground-color . "black")
       (mouse-color . "sienna3")
-      (top-toolbar-shadow-color . "#f7defbeef7de"))
+      (top-toolbar-shadow-color . "grey78"))
 
      (region ((t (:background "goldenrod2"))))
      (default ((t (:stipple nil
