@@ -171,3 +171,6 @@
  )
 (add-hook 'reb-mode-hook 'my-re-builder-hook)
 
+(add-hook 'snippet-mode-hook '(lambda () (local-set-key (kbd "<f5>")
+												   'yas/load-snippet-buffer)))
+
