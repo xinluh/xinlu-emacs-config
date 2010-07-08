@@ -132,6 +132,10 @@
   (setq magit-git-executable "git.cmd"))
 (setq magit-commit-all-when-nothing-staged t)
 
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+(setq sendmail-program "msmtp")
+(setq message-sendmail-extra-arguments (list "-C"
+										 (expand-file-name "~/.emacs.d/personal/msmtp.config")))
 
 ; -----keyboard bindings-----
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
@@ -435,13 +439,17 @@
 		(message "Buffer '%s' is not visiting a file!" name)
 	  (progn 	(copy-file filename newname 1) 	(delete-file filename) 	(set-visited-file-name newname) 	(set-buffer-modified-p nil) 	t))))
 
+(defvar html-header "MIME-Version: 1.0\nContent-Type: text/html;\n\n")
+
 (defun send-email (recipient subject text)
   "Send email with msmtp"
   (with-temp-buffer
-	(insert (concat "Subject: " subject "\n\n"))
+	(insert (concat "Subject: " subject "\n"))
+	;; (insert html-header) (newline) ;for blogger emails
 	(insert text)
 	(call-process-region (point-min) (point-max) "msmtp" nil "temp" t "-C"
 						 (expand-file-name "~/.emacs.d/personal/msmtp.config") recipient)))
+
 
 (defun note-to-self ()
   "Send region as email to myself"
