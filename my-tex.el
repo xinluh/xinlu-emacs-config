@@ -1,5 +1,6 @@
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
+(setq LaTeX-math-menu-unicode t)
 ;; (setq TeX-auto-save t)
 ;; (setq TeX-parse-self t)
 (setq-default TeX-master nil)
@@ -103,6 +104,9 @@
   ;; (local-set-key (kbd "<f5>") (lambda () (interactive) (save-buffer) (tex-file)))
   (local-set-key (kbd "<f5>") (kbd "C-c C-c C-j"))
   (local-set-key (kbd "<f7>") 'TeX-next-error)
+
+  (add-to-list 'TeX-command-list
+			   '("DVI to PDF" "dvipdfm %d" TeX-run-command t t) t)
   )
 ;; (add-hook 'tex-mode-hook 'my-tex-mode-hook)
 (add-hook 'TeX-mode-hook 'my-tex-mode-hook)
@@ -110,4 +114,7 @@
 (defadvice LaTeX-insert-item (around my-LaTeX-insert-item activate)
   "Workaround for undesirable behavior when an item in latex ended with comment"
   (let  ((LaTeX-insert-into-comments nil)) ad-do-it))
+
+(defadvice reftex-offer-label-menu (around no-delete-windows activate)
+  (flet ((delete-other-windows ())) ad-do-it))
 
