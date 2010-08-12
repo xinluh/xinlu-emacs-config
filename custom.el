@@ -142,6 +142,7 @@
 (global-set-key (kbd "C-;")     'dabbrev-expand)
 (global-set-key (kbd "C-c m")   'imenu-selection-buffer)
 (global-set-key (kbd "C-c g")   'rgrep)
+(global-set-key (kbd "C-c c")   'calc-eval-region)
 (global-set-key (kbd "C-c p p") 'project-load)
 (global-set-key (kbd "C-c p u") 'project-unload)
 (global-set-key (kbd "C-c p d") 'project-dired)
@@ -820,3 +821,15 @@
 	(push-mark)
 	(goto-char pos)
 	(end-of-line)))
+
+(defun calc-eval-region (arg beg end)
+  "Calculate the region and display the result in the echo area.
+With prefix ARG non-nil, insert the result at the end of region."
+  (interactive "P\nr")
+  (let* ((expr (buffer-substring-no-properties beg end))
+         (result (calc-eval expr)))
+    (if (null arg)
+        (message "%s = %s" expr result)
+      (goto-char end)
+      (save-excursion
+        (insert result)))))
