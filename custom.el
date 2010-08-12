@@ -115,8 +115,13 @@
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)
 (setq tramp-default-method "ssh")
+(add-to-list 'tramp-default-proxies-alist
+			 '("xenia" nil "/plink:xinlu@karthur.nevis.columbia.edu:"))
+(add-to-list 'tramp-default-proxies-alist
+			 '("pcnevis3" nil "/plink:xinlu@lxplus.cern.ch:"))
 (setq tramp-persistency-file-name (concat emacsd-dir "personal/tramp"))
 (setq dabbrev-case-fold-search t)
+(setq password-cache-expiry nil)
 
 (require 'psvn)
 (setq svn-status-hide-unmodified t)
