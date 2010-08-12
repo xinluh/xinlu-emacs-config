@@ -8,9 +8,11 @@
 (when is-win32
   (setq TeX-output-view-style
 		'(("^dvi$" "^pstricks$\\|^pst-\\|^psfrag$" "dvips %d -o && start \"\" %f")
-		  ("^dvi$" "." "yap -1 %dS %d")
+		  ("^dvi$" "." "yap -1 -s%n%b %d")
 		  ("^pdf$" "." "start \"\" %o")
 		  ("^html?$" "." "start \"\" %o")))
+  ;; (setq TeX-source-specials-mode t)
+  (setq TeX-source-correlate-method 'source-specials)
   (setq TeX-source-specials-view-position-flags "-s %n%b")
   (setq TeX-source-specials-view-editor-flags ""))
   
@@ -84,9 +86,16 @@
    ;; (t (message (concat "No electronic version available: " base ".{pdf,ps}"))))))
    
 ;; (global-set-key [S-f6] 'browse-paper-at-point)
-   
+
+(defun my-tex-insert-item-maybe ()
+  (interactive)
+  (reindent-then-newline-and-indent)
+  (when (string= "itemize" (LaTeX-current-environment))
+	(insert "\\item ")
+	(indent-region (line-beginning-position) (line-end-position))))
+
 (defun my-tex-mode-hook ()
-  (visual-line-mode)
+  ;; (visual-line-mode)
   (LaTeX-math-mode)
   (turn-on-reftex)
   (setq TeX-electric-sub-and-superscript t)
@@ -104,6 +113,8 @@
   ;; (local-set-key (kbd "<f5>") (lambda () (interactive) (save-buffer) (tex-file)))
   (local-set-key (kbd "<f5>") (kbd "C-c C-c C-j"))
   (local-set-key (kbd "<f7>") 'TeX-next-error)
+  (local-set-key (kbd "C-j") 'my-tex-insert-item-maybe)
+  
 
   (add-to-list 'TeX-command-list
 			   '("DVI to PDF" "dvipdfm %d" TeX-run-command t t) t)
