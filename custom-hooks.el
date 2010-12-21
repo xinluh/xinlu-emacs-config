@@ -165,7 +165,7 @@
   (local-set-key (kbd "M-p") 'reb-prev-match)
   (local-set-key (kbd "C-M-%") 'reb-query-replace)
   (local-set-key (kbd "<escape>") 'reb-quit)
-  
+  (message "C-M-% to start query-replace")
   ;; (reb-change-syntax 'string)
 
  )
