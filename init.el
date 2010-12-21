@@ -88,9 +88,9 @@
 
 ;========== emacs server ==========
 (if (and is-win32 (file-exists-p "d:/Users/xinlu/Documents/"))
-	(setq server-auth-dir "d:/Users/xinlu/Documents/"))
-(setq server-use-tcp t)
-(setq server-host "myPC")
+	(setq server-auth-dir "d:/Users/xinlu/Documents/")
+  (setq server-use-tcp t)
+  (setq server-host "myPC"))
 (server-start)
 
 ; maximize emacs on startup
