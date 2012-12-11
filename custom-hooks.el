@@ -74,6 +74,7 @@
 
 (defun my-org-mode-hook ()
     (local-set-key (kbd "<S-return>") 'org-insert-todo-heading)
+	(local-set-key (kbd "<f5>") 'org-ctrl-c-ctrl-c)
 )
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 
@@ -188,3 +189,33 @@
 				   ;; ;; (set-buffer-file-coding-system 'emacs-mule-unix))
 				   ;; (message
 					;; (concat "Saved as script: " buffer-file-name)))))
+
+(require 'generic-x) ;; we need this
+;; make sure to use js-mode instead the js mode in generic-x
+(when (locate-library "javascript")
+  (autoload 'javascript-mode "javascript" nil t)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode)))
+
+(define-generic-mode 
+  'slha-mode                         ;; name of the mode to create
+  nil                           ;; comments start with '!!'
+  '("BLOCK" "Block")                     ;; some keywords
+  '(("\\(#.*\\)" 1 'font-lock-comment-face)
+	("\\(Block [A-z]+\\)" 1 'font-lock-keyword-face))     ;; ';' is a a built-in 
+  nil                      ;; files for which to activate this mode
+  '(lambda () (interactive) (setq comment-start "#"))
+	 ;; (setq comment-start-skip " +#")
+	 ;; (setq comment-end "")
+	 ;; (setq comment-end-skip nil))      ;; other functions to call
+  "A mode for SLHA files"            ;; doc string for this mode
+  )
+
+
+(defun my-js-chrome-extension-mode()
+  (interactive)
+  (js-mode)
+  (local-set-key [f5] (lambda() (interactive) (save-buffer)
+						(call-process "gnome-open" nil 0 nil "http://reload.extensions")))
+
+  )
+(add-hook 'js-mode-hook 'my-programming-mode-hook)

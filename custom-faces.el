@@ -11,12 +11,16 @@
 								   :weight 'normal 
 								   :width 'normal
 								   :height 90)
-  (if (or is-win32 is-emacs23)
+  (when (and is-win32 is-emacs23)
 	(set-face-attribute 'default frame
 						:family "outline-consolas"
 ;; 						:family "bitstream vera sans mono"
-	                    :height 90)
-	(set-face-attribute 'default frame :family "b&h-lucidatypewriter"))
+	                    :height 90))
+	;; (set-face-attribute 'default frame :family "b&h-lucidatypewriter"))
+
+  (when (not is-win32)
+	(set-face-attribute 'default frame
+	                    :height 80))
 
   ;; for XMing 
   ;; (if (and (not is-win32) is-emacs23 (string= x-display-name "localhost:10.0"))

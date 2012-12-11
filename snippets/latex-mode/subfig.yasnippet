@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: subfig
+# key: subfig
+# --
+\subfigure[${1:caption}]{
+\includegraphics[width=${4:0.5}\linewidth]{${3:"waiting for includegraphics call..."$(unless yas/modified-p (LaTeX-includegraphics-read-file-TeX))}}
+\label{${2:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+}

@@ -1,0 +1,26 @@
+# key : figs
+# name : 2x2 figures in a frame
+# --
+\begin{frame}[c]
+ \begin{columns}[onlytextwidth]
+   \begin{column}[t]{0.48\textwidth}
+     ${2:figure_name}
+     \includegraphics[width=\textwidth]{${1:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+   \end{column}
+   \begin{column}[t]{0.48\textwidth}
+     ${4:figure_name}
+     \includegraphics[width=\textwidth]{${3:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+   \end{column}
+ \end{columns}
+  
+ \begin{columns}[onlytextwidth]
+   \begin{column}[t]{0.48\textwidth}
+     ${6:figure_name}
+     \includegraphics[width=\textwidth]{${5:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+   \end{column}
+   \begin{column}[t]{0.48\textwidth}
+     ${8:figure_name}
+     \includegraphics[width=\textwidth]{${7:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+   \end{column}
+ \end{columns}
+\end{frame}

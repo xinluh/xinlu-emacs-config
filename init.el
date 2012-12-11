@@ -59,9 +59,9 @@
 (require 'smex)
 (setq smex-save-file (concat emacsd-dir "personal/smex.save"))
 
-(require 'color-theme)
-(eval-after-load "color-theme"
-  '(progn (color-theme-initialize)))
+;; (require 'color-theme)
+;; (eval-after-load "color-theme"
+;;   '(progn (color-theme-initialize)))
 
 (when is-emacs21 (require 'prev-next-buffer))
 
@@ -76,6 +76,9 @@
 		(byte-compile-file (concat path ".el") t))
 	    (load file)))
 
+(defun byte-compile-if-newer-and-load (file)
+  (load file))
+
 (byte-compile-if-newer-and-load "custom-faces")
 (byte-compile-if-newer-and-load "custom")
 (byte-compile-if-newer-and-load "custom-hooks")
@@ -87,10 +90,10 @@
 (load (concat emacsd-dir "personal/personal.el"))
 
 ;========== emacs server ==========
-(if (and is-win32 (file-exists-p "d:/Users/xinlu/Documents/"))
+(when (and is-win32 (file-exists-p "d:/Users/xinlu/Documents/"))
 	(setq server-auth-dir "d:/Users/xinlu/Documents/")
-  (setq server-use-tcp t)
-  (setq server-host "myPC"))
+	(setq server-use-tcp t)
+	(setq server-host "myPC"))
 (server-start)
 
 ; maximize emacs on startup

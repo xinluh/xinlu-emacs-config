@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: if(msgLvl(MSG::DEBUG))msg(MSG::DEBUG) << MSG::INFO << "sym: " << sym << endreq;
+# key: ddd
+# --
+if(msgLvl(MSG::DEBUG))msg(MSG::DEBUG) << MSG::DEBUG <<  "$1: " << $1 << endreq;

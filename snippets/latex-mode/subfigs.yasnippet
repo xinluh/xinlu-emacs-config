@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: subfigs
+# key: subfigs
+# --
+\begin{figure}[ht]
+  \centering
+  \subfigure[${2:caption}]{
+  \includegraphics[width=0.5\linewidth]{${4:"waiting for includegraphics call..."$(unless yas/modified-p (LaTeX-includegraphics-read-file-TeX))}}
+  \label{${3:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+  }
+  \subfigure[${5:caption}]{
+  \includegraphics[width=0.5\linewidth]{${7:"waiting for includegraphics call..."$(unless yas/modified-p (LaTeX-includegraphics-read-file-TeX))}}
+  \label{${6:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+  }
+  \label{${1:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+  \caption{$0}
+\end{figure}

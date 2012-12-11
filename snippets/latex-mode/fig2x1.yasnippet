@@ -1,0 +1,13 @@
+# key : figs
+# name : 2x1 figures
+# --
+\begin{columns}[onlytextwidth]
+  \begin{column}[t]{0.32\textwidth}
+    ${2:figure_name}
+  \includegraphics[width=\linewidth]{${1:"waiting for includegraphics call..."$(unless yas/modified-p (LaTeX-includegraphics-read-file-TeX))}}
+  \end{column}
+  \begin{column}[t]{0.32\textwidth}
+    ${4:figure_name}
+  \includegraphics[width=\linewidth]{${3:"waiting for includegraphics call..."$(unless yas/modified-p (LaTeX-includegraphics-read-file-TeX))}}
+  \end{column}
+\end{columns}

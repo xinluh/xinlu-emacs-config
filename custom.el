@@ -11,8 +11,33 @@
 ;; therefore on Windows, this is set via registry instead
 (when (not is-win32) (tool-bar-mode 0))  
 
+;; copy & paste properly on linux
+(when (not is-win32)
+  (setq x-select-enable-clipboard t)
+  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
+
 ;; ========================================
 ;; settings so that windows will open the places I want 
+(defun get-window-at-corner (corner &optional FRAME)
+  "return windows at corner 1 = upper left, 2=upper right, etc"
+  (let ((x (cond ((or (= corner 1) (= corner 3)) 4)
+				 (t (- (frame-width) 4))))
+		(y (cond ((or (= corner 1) (= corner 2)) 4)
+				 (t (- (frame-height) 4)))))
+	(window-at x y)))
+(defun my-display-buffer-23 (buf &optional args)
+  "put all buffers in a window other than the one in the bottom right"
+  "for emacsen 23 or above"
+  (if (member (buffer-name buf) special-display-buffer-names)
+	  (display-special-buffer buf)
+	  (progn
+		(let ((pop-up-windows t)
+			  (windows (delete (minibuffer-window) (window-list))))
+		  (if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
+			  (setq windows (delete (get-window-at-corner 4) windows)))
+		  (set-window-buffer (car (cdr windows)) buf)
+		  (car (cdr windows))))))
+
 (if is-emacs23
 	(setq special-display-function 'my-display-buffer-23)
   (setq special-display-function 'my-display-buffer))
@@ -114,11 +139,12 @@
 (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -print0 | xargs -0 -e grep -nH -e ")
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)
+(require 'tramp)
 (setq tramp-default-method "ssh")
-(add-to-list 'tramp-default-proxies-alist
-			 '("xenia" nil "/plink:xinlu@karthur.nevis.columbia.edu:"))
-(add-to-list 'tramp-default-proxies-alist
-			 '("pcnevis3" nil "/plink:xinlu@lxplus.cern.ch:"))
+;; (add-to-list 'tramp-default-proxies-alist
+			 ;; '("xenia" nil "/plink:xinlu@karthur.nevis.columbia.edu:"))
+;; (add-to-list 'tramp-default-proxies-alist
+			 ;; '("pcnevis3" nil "/plink:xinlu@lxplus.cern.ch:"))
 (setq tramp-persistency-file-name (concat emacsd-dir "personal/tramp"))
 (setq dabbrev-case-fold-search t)
 (setq password-cache-expiry nil)
@@ -546,24 +572,16 @@
   (insert char)
   (forward-char -1))
 
-(defadvice kill-new (before kill-new-push-xselection-on-kill-ring activate)
-  "Before putting new kill onto the kill-ring, add the clipboard/external selection to the kill ring"
-  (let ((have-paste (and interprogram-paste-function
-                         (funcall interprogram-paste-function))))
-    (when have-paste (push have-paste kill-ring))))
-
-(defun get-window-at-corner (corner &optional FRAME)
-  "return windows at corner 1 = upper left, 2=upper right, etc"
-  (let ((x (cond ((or (= corner 1) (= corner 3)) 4)
-				 (t (- (frame-width) 4))))
-		(y (cond ((or (= corner 1) (= corner 2)) 4)
-				 (t (- (frame-height) 4)))))
-	(window-at x y)))
+;; (defadvice kill-new (before kill-new-push-xselection-on-kill-ring activate)
+  ;; "Before putting new kill onto the kill-ring, add the clipboard/external selection to the kill ring"
+  ;; (let ((have-paste (and interprogram-paste-function
+                         ;; (funcall interprogram-paste-function))))
+    ;; (when have-paste (push have-paste kill-ring))))
 
 (defun display-special-buffer (buf)
   "put the special buffer in the right spot (bottom rigt)"
 ;;   (let ((windows (delete (minibuffer-window) (window-list))))
-;;     (if (eq 1 (length windows))
+;;     (if (eq 1 (length windows))st
 ;;         (progn
 ;;           (select-window (car windows))
 ;;           (split-window-vertically)))
@@ -585,18 +603,6 @@
 		  (set-window-buffer (car (cdr windows)) buf)
 		  (car (cdr windows))))))
 
-(defun my-display-buffer-23 (buf &optional args)
-  "put all buffers in a window other than the one in the bottom right"
-  "for emacsen 23 or above"
-  (if (member (buffer-name buf) special-display-buffer-names)
-	  (display-special-buffer buf)
-	  (progn
-		(let ((pop-up-windows t)
-			  (windows (delete (minibuffer-window) (window-list))))
-		  (if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
-			  (setq windows (delete (get-window-at-corner 4) windows)))
-		  (set-window-buffer (car (cdr windows)) buf)
-		  (car (cdr windows))))))
 
 (defun swap-windows ()
   "Swap the buffers in the 2 vertically split windows"

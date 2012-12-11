@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ref section
+# key: ref
+# --
+Section \ref{${2:"waiting for reftex-label call..."$(unless yas/modified-p (reftex-reference 's t))}}
