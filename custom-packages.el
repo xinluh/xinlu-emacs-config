@@ -5,14 +5,14 @@
    'package-archives
    '("melpa" . "http://melpa.org/packages/")
    t)
-  
-  (unless package-archive-contents
-	(package-refresh-contents))
+  (package-initialize)  
+;  (unless package-archive-contents
+;	(package-refresh-contents))
 
   (unless (package-installed-p 'use-package)
     (if (yes-or-no-p "Need 'use-package' package to install other packages. Continue?")
 		(package-install 'use-package)))
-  (package-initialize))
+  )
 
 (setq use-package-always-ensure t) ;; make sure external packages that I use are installed
 
@@ -105,6 +105,6 @@
   (add-hook 'ein:notebook-mode-hook 'my-ein-setup)
   )
 
-(use-package company
-  :defer t
-  :idle (global-company-mode))
+;(use-package company
+;  :defer t
+;  :idle (global-company-mode))
