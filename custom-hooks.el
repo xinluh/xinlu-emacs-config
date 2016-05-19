@@ -10,6 +10,11 @@
   (setq truncate-lines t)
 )
 
+(defun my-python-hook ()
+  (my-programming-mode-hook)
+  )
+(add-hook 'python-mode 'my-python-hook)
+
 (defun my-c-mode-hook ()
   (my-programming-mode-hook)
   ;; (setq c-basic-indent 4)

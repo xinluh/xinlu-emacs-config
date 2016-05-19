@@ -245,7 +245,7 @@
 
 (setq special-display-function 'my-display-buffer-23) 
 										; shown theses in separate frame
-(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*" "*magit-rebase-popup*"
+(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*" "*magit-rebase-popup*" "*magit-commit-popup*"
 									 "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
 									 "*Ido Completions*" "*svn-process*"
 									 "*svn-log-edit*" "*Kill Ring*"
