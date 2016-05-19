@@ -121,7 +121,10 @@
   (setq web-mode-code-indent-offset 4)
   (setq web-mode-indent-style 4)
   (local-set-key (kbd "{") 'self-insert-command)
-)
+  )
+
+(use-package expand-region)
+
 ;(use-package company
 ;  :defer t
 ;  :idle (global-company-mode))
