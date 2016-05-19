@@ -6,57 +6,10 @@
 (set-scroll-bar-mode 'right )
 (setq parens-require-spaces nil)
 (windmove-default-keybindings) ;use shift+up,down,etc. for changing window
-
-;; don't like toolbar! However disabling it mess up with maximizing windows on Windows
-;; therefore on Windows, this is set via registry instead
-(when (not is-win32) (tool-bar-mode 0))  
-
+(tool-bar-mode 0)
 ;; copy & paste properly on linux
-(when (not is-win32)
-  (setq x-select-enable-clipboard t)
-  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
-
-;; ========================================
-;; settings so that windows will open the places I want 
-(defun get-window-at-corner (corner &optional FRAME)
-  "return windows at corner 1 = upper left, 2=upper right, etc"
-  (let ((x (cond ((or (= corner 1) (= corner 3)) 4)
-				 (t (- (frame-width) 4))))
-		(y (cond ((or (= corner 1) (= corner 2)) 4)
-				 (t (- (frame-height) 4)))))
-	(window-at x y)))
-(defun my-display-buffer-23 (buf &optional args)
-  "put all buffers in a window other than the one in the bottom right"
-  "for emacsen 23 or above"
-  (if (member (buffer-name buf) special-display-buffer-names)
-	  (display-special-buffer buf)
-	  (progn
-		(let ((pop-up-windows t)
-			  (windows (delete (minibuffer-window) (window-list))))
-		  (if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
-			  (setq windows (delete (get-window-at-corner 4) windows)))
-		  (set-window-buffer (car (cdr windows)) buf)
-		  (car (cdr windows))))))
-
-(if is-emacs23
-	(setq special-display-function 'my-display-buffer-23)
-  (setq special-display-function 'my-display-buffer))
-
-; shown theses in separate frame
-(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
-									 "*Completions*" "*Buffer List*"
-									 "*Ido Completions*" "*svn-process*"
-									 "*svn-log-edit*" "*Kill Ring*"
-									 "*imenu-select*" "*Popup Help*"))
-(setq special-display-regexps '(".*"))
-(setq special-display-frame-alist '((height . 14)
-                                  (width . 80)
-                                  (unsplittable . t)
-                                  (menu-bar-lines nil)))
-;; ========================================
-
-(add-hook 'after-make-frame-functions 'custom-face-all)
-(if (not emacs-runned-once) (custom-face-all))
+(setq x-select-enable-clipboard t)
+(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
 (setq fill-column 90)
 (icomplete-mode 1) ;shows completions in minibuffer
@@ -72,13 +25,13 @@
 (setq ido-enable-flex-matching t)
 (setq ido-max-prospects 8)
 (setq ido-max-work-file-list 50)
-(setq ido-save-directory-list-file (concat emacsd-dir "personal/.ido.last"))
-(define-key ido-buffer-completion-map (kbd "<f3>") 'ido-enter-find-file)
+(setq ido-save-directory-list-file (concat user-emacs-directory "personal/.ido.last"))
 (setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*"
-						   "^\\*tramp" "*Completions*"
+						   "^\\*tramp" "\\*Completions\\*"
 						   "^\\*Ido" "\\*shell\\*" "\\*Help"
 						   "^\\*.*output\\*" "^\\*TeX Help\\*"
 						   "^\\*magit-.*\\*" "^\\*imenu-select\\*"))
+
 
 (winner-mode t)
 (setq ediff-split-window-function (lambda (&optional arg)
@@ -88,21 +41,6 @@
 ;; (which-function-mode t)
 (goto-address-mode t)
 (setq resize-mini-windows nil)
-(setq cpp-face-type 'light)
-
-;-----CEDET stuff-----------
-(semantic-mode t)
-(global-ede-mode t)
-(global-semantic-decoration-mode 1)
-(global-semantic-stickyfunc-mode 1)
-;; (require 'semantic-gcc)
-(if is-win32
-(semantic-add-system-include "d:/cygwin/usr/include/ROOT/" 'c++-mode)
-(semantic-add-system-include "d:/Programs/Python/App/include/" 'python-mode)
-(semantic-add-system-include "d:/Programs/Python/App/Lib/" 'python-mode)
-
-(setq python-command "d:/Programs/Python/App/python.exe")
-(setq python-python-command "d:/Programs/Python/App/python.exe"))
 
 ;-----editing settings----
 (cua-mode t)
@@ -119,11 +57,12 @@
 (delete-selection-mode 1)
 (setq default-tab-width 4)
 (setq view-read-only t) ;enter view mode automatically when file is readonly
-(ansi-color-for-comint-mode-on)
 (add-hook 'auto-fill-mode-hook (lambda() (message "Auto-Fill mode toggled")))
 (setq-default truncate-lines t)
 ;(setq eldoc-echo-area-use-multiline-p nil)
+
 ; -----shell settings----
+(ansi-color-for-comint-mode-on)
 (add-hook 'comint-output-filter-functions ; don't display password in shell
           'comint-watch-for-password-prompt nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -131,37 +70,9 @@
 
 ; -----other settings----
 (setq compilation-scroll-output t) ; always scroll *compilation* buffer
-(add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
-(add-to-list 'auto-mode-alist '("\\.cs$" . csharp-mode))
-(add-to-list 'auto-mode-alist '("\\.cmd$" . cmd-mode))
-(add-to-list 'auto-mode-alist '("\\.bat$" . cmd-mode))
-(add-to-list 'auto-mode-alist '("\\.ahk$" . ahk-mode))
-(setq grep-find-command "find . -type f -not -name \"*.svn-base\" -print0 | xargs -0 -e grep -nH -e ")
+;; (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -print0 | xargs -0 -e grep -nH -e ")
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)
-(require 'tramp)
-(setq tramp-default-method "ssh")
-;; (add-to-list 'tramp-default-proxies-alist
-			 ;; '("xenia" nil "/plink:xinlu@karthur.nevis.columbia.edu:"))
-;; (add-to-list 'tramp-default-proxies-alist
-			 ;; '("pcnevis3" nil "/plink:xinlu@lxplus.cern.ch:"))
-(setq tramp-persistency-file-name (concat emacsd-dir "personal/tramp"))
-(setq dabbrev-case-fold-search t)
-(setq password-cache-expiry nil)
-
-(require 'psvn)
-(setq svn-status-hide-unmodified t)
-
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward)
-(setq uniquify-separator "|")
-(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
-
-(autoload 'magit-status "magit" nil t)
-(when is-win32
-  (setq magit-git-executable "git.cmd"))
-(setq magit-commit-all-when-nothing-staged t)
 
 (setq message-send-mail-function 'message-send-mail-with-sendmail)
 (setq sendmail-program "msmtp")
@@ -183,9 +94,9 @@
 (global-set-key "\C-z"          'undo)
 (global-set-key "\C-v"          'yank)
 (global-set-key (kbd "C-S-y")   'duplicate-line)
-(global-set-key [next]          'pager-page-down)
-(global-set-key "\ev"           'pager-page-up)
-(global-set-key [prior]         'pager-page-up)
+;; (global-set-key [next]          'pager-page-down)
+;; (global-set-key "\ev"           'pager-page-up)
+;; (global-set-key [prior]         'pager-page-up)
 ;(global-set-key "%"             'match-paren)
 (global-set-key (kbd "M-x")     'smex)
 (global-set-key (kbd "M-S-x")     'execute-extended-command)
@@ -219,7 +130,7 @@
 (global-set-key [M-f3]			'ido-switch-buffer-other-window)
 (global-set-key [C-f3]			'insert-path)
 (global-set-key [S-f3]			'ffap)
-;; (global-set-key [f4]			'yas/expand)
+(global-set-key [f4]			'yas/expand)
 (global-set-key [M-f4]			'delete-frame-or-exit)
 (global-set-key [S-f4]  		'bury-buffer)
 (global-set-key [C-f4]			'kill-this-buffer)
@@ -243,7 +154,6 @@
 (global-set-key [M-f11]			'toggle-truncate-lines)
 (global-set-key [C-f11]			'auto-fill-mode)
 (global-set-key [f12]	        'google)
-(global-set-key [C-f12]	        'browse-root-doc)
 (global-set-key (kbd "<pause>")  'view-mode)
 (global-set-key (kbd "<Scroll_Lock>")  'restore-windows-config)
 (global-set-key (kbd "<scroll>")  'restore-windows-config)
@@ -266,18 +176,28 @@
 (define-key isearch-mode-map (kbd "C-v") ;yank in current word
   (lambda () (interactive) (save-excursion (skip-syntax-backward "w_")
 		   (isearch-yank-internal (lambda () (skip-syntax-forward "w_") (point))))))
-;; (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
-;; (defun my-goto-match-beginning ()
-;;     (when isearch-forward (goto-char isearch-other-end)))
 
 ;completion shortcut in minibuffer
-(define-key minibuffer-local-completion-map (kbd "<f3>")
-                          'complete-minibuffer-path)
+;; (define-key minibuffer-local-completion-map (kbd "<f3>")
+                          ;; 'complete-minibuffer-path)
+
 ; insert current buffer name into minibuffer
-(define-key minibuffer-local-map [f3]
-  (lambda () (interactive)
-     (insert (buffer-name (window-buffer (minibuffer-selected-window))))))
-(define-key minibuffer-local-map (kbd "C-i") 'comint-dynamic-complete)
+;; (define-key minibuffer-local-map [f3]
+  ;; (lambda () (interactive)
+	;; (insert (buffer-name (window-buffer (minibuffer-selected-window))))))
+
+(define-key ido-buffer-completion-map (kbd "<f3>") 'ido-enter-find-file)
+(define-key ido-file-completion-map (kbd "<f3>") 'ido-enter-switch-buffer)
+(define-key ido-buffer-completion-map (kbd "C-o") 'ido-enter-find-file)
+(define-key ido-file-completion-map (kbd "C-o") 'ido-enter-switch-buffer)
+
+;; possibly needed
+;; (add-hook 'ido-setup-hook 
+          ;; (lambda () 
+            ;; (define-key ido-completion-map [tab] 'ido-complete)))
+
+
+(define-key minibuffer-local-map (kbd "C-i") 'completion-at-point)
 
 ;;automatically close brackets, quotes, etc when typing
 (setq skeleton-pair t)
@@ -286,65 +206,145 @@
 (global-set-key "(" 'skeleton-pair-insert-maybe)
 (global-set-key "\"" 'skeleton-pair-insert-maybe)
 
-;; save a list of open files in ~/.emacs.desktop
-;; save the desktop file automatically if it already exists
-(require 'desktop)
-(setq desktop-save 'ask)
-(setq desktop-restore-eager 4)
-(setq desktop-files-not-to-save "----------------------------------")
-(setq desktop-dirname (concat emacsd-dir "personal/"))
-(setq desktop-path '("~" "."))
-(add-to-list 'desktop-path (concat emacsd-dir "personal/"))
+;; Put autosave files (ie #foo#) in one place, *not*
+;; scattered all over the file system!
+(defvar autosave-dir (concat user-emacs-directory "autosave/"))
+(make-directory autosave-dir t)
+(defun auto-save-file-name-p (filename)
+  (string-match "^#.*#$" (file-name-nondirectory filename)))
+(defun make-auto-save-file-name ()
+  (concat autosave-dir
+		  (if buffer-file-name
+			  (concat "#" (file-name-nondirectory buffer-file-name) "#")
+			(expand-file-name
+			 (concat "#%" (buffer-name) "#")))))
+(setq backup-directory-alist (list (cons "." autosave-dir)))
 
-;; save a bunch of variables to the desktop file
-;; for lists specify the len of the maximal saved data also
-(setq desktop-globals-to-save
-      (append '((extended-command-history . 30)
-                (file-name-history        . 100)
-                (grep-history             . 30)
-                (compile-history          . 30)
-                (minibuffer-history       . 50)
-                (query-replace-history    . 60)
-                (read-expression-history  . 60)
-                (regexp-history           . 60)
-                (regexp-search-ring       . 20)
-                (search-ring              . 20)
-                (shell-command-history    . 50)
-				(closed-files             . 20)
-                tags-file-name
-                register-alist)))
-;; 				saved-window-configuration)))
-(desktop-save-mode 1)
+;; ========================================
 
-(when is-win32
-  ; make the ugly \m at end of line go away
-  (add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m nil t)
+;; settings so that windows will open the places I want 
+(defun get-window-at-corner (corner &optional FRAME)
+  "return windows at corner 1 = upper left, 2=upper right, etc"
+  (let ((x (cond ((or (= corner 1) (= corner 3)) 4)
+				 (t (- (frame-width) 4))))
+		(y (cond ((or (= corner 1) (= corner 2)) 4)
+				 (t (- (frame-height) 4)))))
+	(window-at x y)))
+(defun my-display-buffer-23 (buf &optional args)
+  "put all buffers in a window other than the one in the bottom right"
+  "for emacsen 23 or above"
+  (if (member (buffer-name buf) special-display-buffer-names)
+	  (display-special-buffer buf)
+	(progn
+	  (let ((pop-up-windows t)
+			(windows (delete (minibuffer-window) (window-list))))
+		(if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
+			(setq windows (delete (get-window-at-corner 4) windows)))
+		(set-window-buffer (car (cdr windows)) buf)
+		(car (cdr windows))))))
 
-  (when has-cygwin
-       ; getting cygwin bash as shell
-    (setenv "PATH" (concat cygwin-path "bin;"
-                           cygwin-path "usr/local/bin;"
-                           (getenv "PATH")))
-    (setenv "PS1" "\\[\\e[32m\\]\\w\\[\\e[0m\\] \\$ ")
-    (add-to-list 'exec-path (concat cygwin-path "bin"))
-    (add-to-list 'exec-path (concat cygwin-path "usr/local/bin"))
-    (require 'cygwin-mount)
-    (cygwin-mount-activate)
+(setq special-display-function 'my-display-buffer-23) 
+										; shown theses in separate frame
+(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
+									 "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
+									 "*Ido Completions*" "*svn-process*"
+									 "*svn-log-edit*" "*Kill Ring*"
+									 "*imenu-select*" "*Popup Help*"))
+(setq special-display-regexps '(".*"))
+(setq special-display-frame-alist '((height . 14)
+									(width . 80)
+									(unsplittable . t)
+									(menu-bar-lines nil)))
 
-    (setq explicit-shell-file-name "bash.exe")
-    (setq shell-file-name explicit-shell-file-name)
-	(setq explicit-bash-args (quote ("--noediting" "-i" "--login"))))
+;================================================
+; advices
+(require 'noflet)
 
-  (when (not has-cygwin)
-    (setq explicit-shell-file-name "cmdproxy")
-    (add-to-list 'exec-path (concat home-dir "bin"))
-    (setq shell-file-name explicit-shell-file-name)
-    (setenv "PATH" (concat (concat home-dir "bin;") (getenv "PATH")))))
+(defadvice split-window-vertically
+	(after my-window-splitting-advice first () activate)
+  "activate the next buffer whenever window splits"
+  (set-window-buffer (next-window) (other-buffer)))
+(defadvice split-window-horizontally
+    (after my-window-splitting-advice first () activate)
+  "activate the next buffer whenever window splits"
+  (set-window-buffer (next-window) (other-buffer)))
 
-;(setq explicit-bash-args (quote ("--noediting" "--login")))
+;; don't quit frame ???
+(defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
+  (noflet ((one-window-p (&optional nomini all-frames) t)) ad-do-it))
 
+(defadvice compile (before my-compile activate)
+  "save buffer before compile"
+  (save-buffer))
+
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  "Prevent annoying 'Active processes exist' query when you quit Emacs."
+  (noflet ((process-list ())) ad-do-it))
+
+;; doens't work :(
+;; (defadvice shell-command (around my-shell-command (COMMAND &optional OUTPUT-BUFFER ERROR-BUFFER) activate)
+  ;; (noflet ((read-shell-command (PROMPT &optional INITIAL-CONTENTS HIST &rest ARGS)
+							  ;; (funcall this-fn (concat default-directory " $: ") INITIAL-CONTENTS HIST ARGS)))
+	;; ad-do-it))
+
+;; make parenthesis behave normally: no need to escape
+;; (defadvice query-replace-regexp (before my-query-replace-regexp activate))
+;; (when (interactive-p)
+;; (ad-set-arg 0 (replace-regexp-in-string "(" "\\\\(" (ad-get-arg 0)))
+;; (ad-set-arg 0 (replace-regexp-in-string ")" "\\\\)" (ad-get-arg 0)))))
+
+(defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
+  "Kill up to the ARG'th occurence of CHAR, and leave CHAR.
+  The CHAR is replaced and the point is put before CHAR."
+  (insert char)
+  (forward-char -1))
+
+(defadvice kill-new (before kill-new-push-xselection-on-kill-ring activate)
+  "Before putting new kill onto the kill-ring, add the clipboard/external selection to the kill ring"
+  (let ((have-paste (and interprogram-paste-function
+						 (funcall interprogram-paste-function))))
+	(when have-paste (push have-paste kill-ring))))
+
+(defadvice yank (after indent-region activate)
+  (if (member major-mode
+			  '(emacs-lisp-mode scheme-mode lisp-mode
+								c-mode c++-mode objc-mode
+								latex-mode plain-tex-mode))
+	  (let ((mark-even-if-inactive t))
+		(indent-region (region-beginning) (region-end) nil))))
+
+(defadvice yank-pop (after indent-region activate)
+  (if (member major-mode
+			  '(emacs-lisp-mode scheme-mode lisp-mode
+								c-mode c++-mode objc-mode
+								latex-mode plain-tex-mode))
+	  (let ((mark-even-if-inactive t))
+		(indent-region (region-beginning) (region-end) nil))))
+
+(defvar ido-enable-replace-completing-read t
+  "If t, use ido-completing-read instead of completing-read if possible.")
+(defadvice completing-read (around my-completing-read-ido activate)
+  (if (or (not ido-enable-replace-completing-read)
+		  (boundp 'ido-cur-item))  ad-do-it
+	(let ((allcomp (all-completions "" collection predicate)))
+      (if allcomp
+          (setq ad-return-value
+                (ido-completing-read prompt
+									 allcomp
+									 nil require-match initial-input hist def))
+        ad-do-it))))
+; need this so that the above advice will not screw up reading file names
+(setq read-file-name-function 'ido-read-file-name)
+(defadvice dired-do-rename (around my-dired-do-rename activate)
+  (let ((ido-enable-replace-completing-read nil)) ad-do-it))
+; don't screw up rgrep etc. either
+(defadvice grep-read-files (around my-rgrep activate)
+  (let ((ido-enable-replace-completing-read nil))
+	ad-do-it))
+										
 
 ;=================================================
+; functions
 
 ;for efficient commenting
 (defun comment-and-go-down ()
@@ -390,10 +390,10 @@
 	(message "File reloaded")))
 
 (defun dot-emacs ()  (interactive)
-  (find-file (concat emacsd-dir "init.el")))
+  (find-file (concat user-emacs-directory "init.el")))
 
 (defun ecustom ()  (interactive)
-  (find-file (concat emacsd-dir "custom.el")))
+  (find-file (concat user-emacs-directory "custom.el")))
 
 (defun insert-path (&optional arg)
   "Inserts a path into the buffer with completion and strip the path of tramp syntaxes"
@@ -414,7 +414,7 @@
 (defun shell-command-mod
   (command &optional output-buffer error-buffer)
   "shell-command that displays the working direction as prompt"
-  (interactive (list (read-from-minibuffer (concat default-directory " $: ")
+  (interactive (list (read-shell-command (concat default-directory " $: ")
                       nil nil nil 'shell-command-history)
              current-prefix-arg))
   (shell-command command output-buffer error-buffer))
@@ -519,64 +519,16 @@
         (unless (memq (char-before) '(?\) ?\")) (forward-sexp)))
       (mark-sexp -1))))
 
-(defadvice split-window-vertically
-  (after my-window-splitting-advice first () activate)
-  "activate the next buffer whenever window splits"
-    (set-window-buffer (next-window) (other-buffer)))
-(defadvice split-window-horizontally
-    (after my-window-splitting-advice first () activate)
-  "activate the next buffer whenever window splits"
-    (set-window-buffer (next-window) (other-buffer)))
-
-(defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
-  (flet  ((one-window-p (&optional nomini all-frames) t)) ad-do-it))
-
-(defadvice compile (before my-compile activate)
-  (save-buffer))
-
-(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
-  (flet ((process-list ())) ad-do-it))
-
-(defadvice vc-version-diff (around my-vc-version-diff activate)
-  "Don't shrink buffer when displaying vc-diff !!"
-  (flet ((shrink-window-if-larger-than-buffer ())) ad-do-it))
-
-;; (defadvice query-replace-regexp (before my-query-replace-regexp activate))
-  ;; (when (interactive-p)
-    ;; (ad-set-arg 0 (replace-regexp-in-string "(" "\\\\(" (ad-get-arg 0)))
-    ;; (ad-set-arg 0 (replace-regexp-in-string ")" "\\\\)" (ad-get-arg 0)))))
 
 (defun fullscreen ()
   "toggles whether the currently selected frame consumes the entire
    display or is decorated with a window border"
   (interactive)
-  (if is-win32 (w32-maximize-frame)
-  (progn (let ((f (selected-frame)))
+  (let ((f (selected-frame)))
     (modify-frame-parameters f `((fullscreen . ,
-			  (if (eq nil (frame-parameter f 'fullscreen)) 'fullboth nil))))))))
+			  (if (eq nil (frame-parameter f 'fullscreen)) 'fullboth nil))))))
 
-(defun w32-maximize-frame ()
-  "Maximize the current frame (windows only)"
-  (interactive)
-  (w32-send-sys-command 61488))
 
-(defun w32-restore-frame ()
-  "Restore a minimized/maximized frame (windows only)"
-  (interactive)
-  (w32-send-sys-command 61728))
-
-(defadvice zap-to-char (after my-zap-to-char-advice (arg char) activate)
-  "Kill up to the ARG'th occurence of CHAR, and leave CHAR.
-  The CHAR is replaced and the point is put before CHAR."
-  (insert char)
-  (forward-char -1))
-
-;; (defadvice kill-new (before kill-new-push-xselection-on-kill-ring activate)
-  ;; "Before putting new kill onto the kill-ring, add the clipboard/external selection to the kill ring"
-  ;; (let ((have-paste (and interprogram-paste-function
-                         ;; (funcall interprogram-paste-function))))
-    ;; (when have-paste (push have-paste kill-ring))))
 
 (defun display-special-buffer (buf)
   "put the special buffer in the right spot (bottom rigt)"
@@ -632,13 +584,6 @@
   (other-window 1) (set-window-text-height nil 12)
   (other-window 1))
 
-(defun browse-root-doc ()
-  (interactive)
-  (let ((class (read-string "class name: ")))
-	(browse-url (concat "http://root.cern.ch/root/html522/" class ".html")))
-  (shell-command "wmctrl -a firefox")
-  )
-
 (defun google ()
   (interactive)
   (let ((class (read-string "google for: ")))
@@ -646,45 +591,12 @@
   (shell-command "wmctrl -a firefox")
   )
 
-(defun browse-img ()
-  (interactive)
-  (make-frame '((name . "View output -Emacs-") (width . 358) (height . 64) ))
-  ;; (raise-frame)
-  ;; (split-window-horizontally)
-  )
-
-(defadvice yank (after indent-region activate)
-  (if (member major-mode
-			  '(emacs-lisp-mode scheme-mode lisp-mode
-								c-mode c++-mode objc-mode
-								latex-mode plain-tex-mode))
-	  (let ((mark-even-if-inactive t))
-		(indent-region (region-beginning) (region-end) nil))))
-
-(defadvice yank-pop (after indent-region activate)
-  (if (member major-mode
-			  '(emacs-lisp-mode scheme-mode lisp-mode
-								c-mode c++-mode objc-mode
-								latex-mode plain-tex-mode))
-	  (let ((mark-even-if-inactive t))
-		(indent-region (region-beginning) (region-end) nil))))
-
-(defvar ido-enable-replace-completing-read t
-  "If t, use ido-completing-read instead of completing-read if possible.")
-(defadvice completing-read (around my-completing-read-ido activate)
-  (if (or (not ido-enable-replace-completing-read)
-		  (boundp 'ido-cur-item))  ad-do-it
-	(let ((allcomp (all-completions "" collection predicate)))
-      (if allcomp
-          (setq ad-return-value
-                (ido-completing-read prompt
-									 allcomp
-									 nil require-match initial-input hist def))
-        ad-do-it))))
-; need this so that the above advice will not screw up reading file names
-(setq read-file-name-function 'ido-read-file-name)
-(defadvice dired-do-rename (around my-dired-do-rename activate)
-  (let ((ido-enable-replace-completing-read nil)) ad-do-it))
+;; (defun browse-img ()
+  ;; (interactive)
+  ;; (make-frame '((name . "View output -Emacs-") (width . 358) (height . 64) ))
+  ;; ;; (raise-frame)
+  ;; ;; (split-window-horizontally)
+  ;; )
 
 (defun build-tag-table (dir-name)
   "Create tag files"
@@ -781,22 +693,6 @@
   ;; "rename frame to NAME"
   ;; (interactive "sName: ")
   ;; (modify-frame-parameters nil '((title . name))))
-
-; Put autosave files (ie #foo#) in one place, *not*
-;; scattered all over the file system!
-(defvar autosave-dir (concat emacsd-dir "autosave/"))
-(make-directory autosave-dir t)
-(defun auto-save-file-name-p (filename)
-  (string-match "^#.*#$" (file-name-nondirectory filename)))
-
-(defun make-auto-save-file-name ()
-  (concat autosave-dir
-   (if buffer-file-name
-	   (concat "#" (file-name-nondirectory buffer-file-name) "#")
-	 (expand-file-name
-	  (concat "#%" (buffer-name) "#")))))
-
-(setq backup-directory-alist (list (cons "." autosave-dir)))
 
 (defun lorem ()
   "Insert a lorem ipsum."

@@ -1,10 +1,10 @@
 (setq dired-listing-switches "-alh") ; human readable sizes
   
-(when is-win32 (setq ls-lisp-ignore-case t)
-      ;(setq ls-lisp-verbosity (delq 'uid ls-lisp-verbosity))
-      (setq ls-lisp-verbosity (delq 'gid ls-lisp-verbosity))
-      (setq ls-lisp-dirs-first t)
-	  (setq w32-get-true-file-attributes t))
+;; (when is-win32 (setq ls-lisp-ignore-case t)
+      ;; ;(setq ls-lisp-verbosity (delq 'uid ls-lisp-verbosity))
+      ;; (setq ls-lisp-verbosity (delq 'gid ls-lisp-verbosity))
+      ;; (setq ls-lisp-dirs-first t)
+	  ;; (setq w32-get-true-file-attributes t))
 (setq dired-dwim-target t)
 ;; (put 'dired-find-alternate-file 'disabled nil)
 
@@ -12,14 +12,14 @@
 (setq image-dired-thumb-width 400)
 
 ;for image-dired mode
-(when is-win32
-  (setq image-dired-external-viewer  "D:/Programs/IrfanView/i_view32.exe"))
+;; (when is-win32
+  ;; (setq image-dired-external-viewer  "D:/Programs/IrfanView/i_view32.exe"))
 
 (defun dired-do-cat-file ()
   "run 'cat' on the marked or current file; useful when visiting file is slow over tramp"
   (interactive)
   (when (not (string-match "\.root" (dired-get-filename t)))
-	(shell-command (concat "cat " (dired-get-filename t)))))
+	(shell-command (concat "cat '" (dired-get-filename t) "'"))))
 
 (defun dired-do-tail-file ()
   "run 'tail' on the marked or current file; useful when visiting file is slow over tramp"

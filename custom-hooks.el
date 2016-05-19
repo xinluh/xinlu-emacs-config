@@ -29,6 +29,7 @@
 ;;   (make-variable-buffer-local 'compile-output-file)
   (setq indent-tabs-mode nil)
   (setq c-basic-offset 2)
+  (setq cpp-face-type 'light)
   (subword-mode 1)
   (c-toggle-hungry-state 1)
   (c-set-offset 'substatement-open 0)
@@ -196,6 +197,7 @@
   (autoload 'javascript-mode "javascript" nil t)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode)))
 
+; major mode for SLHA files
 (define-generic-mode 
   'slha-mode                         ;; name of the mode to create
   nil                           ;; comments start with '!!'
