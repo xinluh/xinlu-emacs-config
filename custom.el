@@ -244,8 +244,9 @@
 		(car (cdr windows))))))
 
 (setq special-display-function 'my-display-buffer-23) 
-										; shown theses in separate frame
-(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*" "*magit-rebase-popup*" "*magit-commit-popup*"
+; shown theses in separate frame
+(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
+									 "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*"
 									 "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
 									 "*Ido Completions*" "*svn-process*"
 									 "*svn-log-edit*" "*Kill Ring*"

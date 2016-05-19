@@ -12,6 +12,7 @@
 
 (defun my-python-hook ()
   (my-programming-mode-hook)
+  (local-set-key [f5] 'elpy-shell-send-region-or-buffer)
   )
 (add-hook 'python-mode 'my-python-hook)
 
