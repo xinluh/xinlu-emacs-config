@@ -26,7 +26,7 @@
 (setq ido-max-prospects 8)
 (setq ido-max-work-file-list 50)
 (setq ido-save-directory-list-file (concat user-emacs-directory "personal/.ido.last"))
-(setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*"
+(setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*" "\\*Warnings\\*"
 						   "^\\*tramp" "\\*Completions\\*"
 						   "^\\*Ido" "\\*shell\\*" "\\*Help"
 						   "^\\*.*output\\*" "^\\*TeX Help\\*"
@@ -245,7 +245,7 @@
 
 (setq special-display-function 'my-display-buffer-23) 
 										; shown theses in separate frame
-(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
+(setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*" "*magit-rebase-popup*"
 									 "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
 									 "*Ido Completions*" "*svn-process*"
 									 "*svn-log-edit*" "*Kill Ring*"
