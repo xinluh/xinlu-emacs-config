@@ -10,7 +10,8 @@
 ;	(package-refresh-contents))
 
   (unless (package-installed-p 'use-package)
-    (if (yes-or-no-p "Need 'use-package' package to install other packages. Continue?")
+    (when (yes-or-no-p "Need 'use-package' package to install other packages. Continue?")
+	    (package-refresh-contents)
 		(package-install 'use-package)))
   )
 
@@ -70,6 +71,9 @@
 
 (use-package yasnippet
   :config (yas-global-mode 1))
+
+(use-package noflet)
+(use-package solarized-theme)
 
 ;; (autoload 'folding-mode "folding" "Folding mode" t)
 

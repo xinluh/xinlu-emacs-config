@@ -7,10 +7,12 @@
 (setq parens-require-spaces nil)
 (windmove-default-keybindings) ;use shift+up,down,etc. for changing window
 (tool-bar-mode 0)
-;; copy & paste properly on linux
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-
+(when (eq system-type 'gnu/linux);; copy & paste properly on linux
+	  (setq x-select-enable-clipboard t)
+	  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
+(when (eq system-type 'darwin);; copy & paste properly on linux
+  (setq mac-option-modifier 'super)
+  (setq mac-command-modifier 'meta))
 (setq fill-column 90)
 (icomplete-mode 1) ;shows completions in minibuffer
 (put 'downcase-region 'disabled nil)
