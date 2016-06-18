@@ -1,6 +1,7 @@
 ; -----general settings----
 (setq inhibit-startup-message t)
 (setq disabled-command-function nil)
+(setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p) ;make the y or n suffice for a yes or no question
 (setq frame-title-format "%b %+%+ (Emacs)") ;; set emacs title to the document
 (set-scroll-bar-mode 'right )
@@ -10,7 +11,7 @@
 (when (eq system-type 'gnu/linux);; copy & paste properly on linux
 	  (setq x-select-enable-clipboard t)
 	  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
-(when (eq system-type 'darwin);; copy & paste properly on linux
+(when (eq system-type 'darwin)
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta))
 (setq fill-column 90)
@@ -68,6 +69,7 @@
 (add-hook 'comint-output-filter-functions ; don't display password in shell
           'comint-watch-for-password-prompt nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(setq explicit-shell-file-name "zsh")
 (setq comint-prompt-read-only t)
 
 ; -----other settings----
@@ -87,18 +89,10 @@
 (global-set-key (kbd "C-c m")   'imenu-selection-buffer)
 (global-set-key (kbd "C-c g")   'rgrep)
 (global-set-key (kbd "C-c c")   'calc-eval-region)
-(global-set-key (kbd "C-c p p") 'project-load)
-(global-set-key (kbd "C-c p u") 'project-unload)
-(global-set-key (kbd "C-c p d") 'project-dired)
-(global-set-key (kbd "C-c p s") 'project-status)
-(global-set-key (kbd "C-c p f") 'project-find-file-ido-in-dir)
 (global-set-key "\M-m"          'er/expand-region) ;was newline-and-indent
 (global-set-key "\C-z"          'undo)
 (global-set-key "\C-v"          'yank)
 (global-set-key (kbd "C-S-y")   'duplicate-line)
-;; (global-set-key [next]          'pager-page-down)
-;; (global-set-key "\ev"           'pager-page-up)
-;; (global-set-key [prior]         'pager-page-up)
 ;(global-set-key "%"             'match-paren)
 (global-set-key (kbd "M-x")     'smex)
 (global-set-key (kbd "M-S-x")     'execute-extended-command)
@@ -139,13 +133,13 @@
 (global-set-key [M-S-f4]		'delete-window)
 (global-set-key [C-S-f4]        (lambda() (interactive) (kill-buffer (current-buffer))
                                                (delete-window)))
+(global-set-key [f5]            'compile)
 (global-set-key [M-f5]			'reload-file)
 (global-set-key [f6]			'shell-command-mod)
 (global-set-key [C-f6]			'shell)
 (global-set-key [f7]			'next-error)
 (global-set-key [S-f7]			'previous-error)
-(global-set-key [f8]	        'dired)
-(global-set-key [C-f8]	        'vcs-start)
+(global-set-key [f8]	        'vcs-start)
 (global-set-key [C-f9]	        'highlight-symbol-at-point)
 (global-set-key [f9]	        'highlight-symbol-next)
 (global-set-key [S-f9]	        'highlight-symbol-prev)
@@ -157,14 +151,18 @@
 (global-set-key [C-f11]			'auto-fill-mode)
 (global-set-key [f12]	        'google)
 (global-set-key (kbd "<pause>")  'view-mode)
+(global-set-key (kbd "<f13>")  'view-mode)
 (global-set-key (kbd "<Scroll_Lock>")  'restore-windows-config)
 (global-set-key (kbd "<scroll>")  'restore-windows-config)
 (global-set-key (kbd "<apps>")  'smex)
 (global-set-key (kbd "<menu>")  'smex)
-(global-set-key [M-down] 'comment-and-go-down)
-(global-set-key [M-up] 'uncomment-and-go-up)
+(bind-key* [M-down] 'comment-and-go-down)
+(bind-key* [M-up] 'uncomment-and-go-up)
 (global-set-key (kbd "M-SPC") 'cua-set-mark)
 (global-set-key (kbd "C-/") 'comment-region)
+(when (eq system-type 'darwin) ;; super is remapped in mac
+  (global-set-key (kbd "s-<backspace>") 'backward-kill-word))
+
 
 ; set saner keys for isearch-mode
 (define-key isearch-mode-map (kbd "C-o")  (lambda () (interactive)
@@ -220,7 +218,7 @@
 			  (concat "#" (file-name-nondirectory buffer-file-name) "#")
 			(expand-file-name
 			 (concat "#%" (buffer-name) "#")))))
-(setq backup-directory-alist (list (cons "." autosave-dir)))
+(setq backup-directory-alist (list (cons autosave-dir "."))) 
 
 ;; ========================================
 
@@ -387,9 +385,11 @@
   (revert-buffer t t t) (message "File reloaded"))
 
 (defun reload-file-force () (interactive)
-  (let ((filename (buffer-file-name)))
+  (let ((filename (buffer-file-name))
+		(start (window-start (selected-window))))
 	(kill-buffer (current-buffer))
 	(find-file filename)
+	(set-window-start (selected-window) start)
 	(message "File reloaded")))
 
 (defun dot-emacs ()  (interactive)
@@ -545,7 +545,9 @@
 	(set-window-buffer w1 b2)
 	(set-window-buffer w2 b1)
 	(set-window-start w1 s2)
-	(set-window-start w2 s1)))
+	(set-window-start w2 s1)
+	(select-window (get-window-at-corner 1))
+	))
 
 (defun save-mark ()
   "save push mark on mark-ring for coming back"
@@ -686,7 +688,7 @@
   (interactive)
   (let ((backend (vc-backend (buffer-file-name))))
 	(when (string-equal backend "SVN") (svn-status default-directory))
-	(when (string-equal backend "Git") (magit-status default-directory))
+	(when (string-equal backend "Git") (magit-status))
 	(when (string-equal backend "CVS") (cvs-examine default-directory nil))))
 
 (defun find-definition (arg)

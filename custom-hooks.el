@@ -8,13 +8,39 @@
 	("\\<\\([f|F][i|I][x|X][m|M][e|E]:*\\)" 1 font-lock-warning-face prepend)
     ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
   (setq truncate-lines t)
+  (local-set-key (kbd "C-S-<right>") 'hs-show-block)
+  (local-set-key (kbd "C-S-<left>")  'hs-hide-block)
+  (local-set-key (kbd "C-S-<up>")	   'hs-hide-all)
+  (local-set-key (kbd "C-S-<down>")  'hs-show-all)
+  (hs-minor-mode 1) ; hide-show mode
 )
 
 (defun my-python-hook ()
   (my-programming-mode-hook)
   (local-set-key [f5] 'elpy-shell-send-region-or-buffer)
+  (my-elpy-setup)
   )
 (add-hook 'python-mode 'my-python-hook)
+(add-hook 'inferior-python-mode-hook (lambda ()
+	(local-set-key (kbd "<up>") (lambda nil (interactive) (if
+	   (comint-after-pmark-p) (comint-previous-input 1) (previous-line 1))))  
+    (local-set-key (kbd "<down>") (lambda nil (interactive) (if
+	    (comint-after-pmark-p) (comint-next-input 1) (next-line 1))))
+	))
+
+;; also set/unset the env variables in the conda init files with pyvenv
+(defun my-pyvenv-activate (venv-path)
+  (let* ((cmd (concat "for f in " venv-path "/etc/conda/activate.d/*.sh; do source $f 2&>1; done; env"))
+		 (new-proc-env (split-string (shell-command-to-string cmd))))
+	(setq pyvenv-old-process-environment2 process-environment)
+	(setq process-environment (append new-proc-env process-environment))))
+(defun my-pyvenv-deactivate ()
+  (when (boundp 'pyvenv-old-process-environment2)
+	(setq process-environment pyvenv-old-process-environment2)))
+(advice-add 'pyvenv-activate :after #'my-pyvenv-activate)
+(advice-add 'pyvenv-deactivate :after #'my-pyvenv-deactivate)
+
+
 
 (defun my-c-mode-hook ()
   (my-programming-mode-hook)

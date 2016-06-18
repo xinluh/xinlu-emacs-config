@@ -15,7 +15,8 @@
 		(package-install 'use-package)))
   )
 
-(setq use-package-always-ensure t) ;; make sure external packages that I use are installed
+;; make sure external packages that I use are installed
+(setq use-package-always-ensure t) 
 
 (add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
 
@@ -75,26 +76,73 @@
 (use-package noflet)
 (use-package solarized-theme)
 
-;; (autoload 'folding-mode "folding" "Folding mode" t)
-
 ;; (require 'bm)
 
 ;; (require 'dired-isearch)
 
 (use-package highlight-symbol)
 
-;; ;; (require 'dabbrev-expand-multiple)
-
 (use-package browse-kill-ring
   :config (browse-kill-ring-default-keybindings))
 ;; (setq browse-kill-ring-quit-action 'save-and-restore)
 
+(use-package bind-key)
+
+(use-package projectile
+  :config
+  (setq projectile-keymap-prefix (kbd "C-'"))
+  (bind-key* (kbd "C-'") 'projectile-command-map)
+  ;; (global-set-key (kbd "M-p M-p") 'projectile-find-file)
+  (defun my-projectile-test-suffix (project-type)
+	(if (member project-type '(django python-pip python-pkg python-tox))
+		"_tests"
+	  (projectile-find-file project-type)))
+  (setq projectile-test-suffix-function 'my-projectile-test-suffix)
+  
+  (setq projectile-mode-line '(:eval
+							   (if
+								   (file-remote-p default-directory)
+								   " Proj"
+								 (format " {%s}"
+										 (projectile-project-name)))))
+  (projectile-global-mode)
+  )
+
+
+(use-package ido-grid-mode
+  :config
+  (setq ido-grid-mode-start-collapsed t)
+  (ido-grid-mode 1))
+
+(use-package flx-ido
+  :config
+  (flx-ido-mode 1)
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-faces nil)
+  (setq gc-cons-threshold 20000000) ; better GC threshold for flx
+  )
+
+(use-package ag
+  :config
+  (setq ag-highlight-search t)
+  (setq ag-reuse-window 't)
+  )
 
 ;; also need: sudo pip install jedi flake8 importmagic autopep8 yapf
 (use-package elpy
   :config
   (elpy-enable)
-  (elpy-use-ipython))
+  (ignore-errors (elpy-use-ipython)) 
+  (defun my-elpy-setup ()
+	(local-set-key [M-left] 'pop-tag-mark)
+	(local-set-key [M-down] 'comment-and-go-down)
+	(local-set-key [M-up] 'uncomment-and-go-up)
+	(local-set-key (kbd "<f1> M-.") 'elpy-goto-definition-other-window)
+	
+	)
+  (add-hook 'elpy-mode-hook 'my-elpy-setup)
+  
+  )
 
 (use-package flycheck
   :config
@@ -128,6 +176,10 @@
   )
 
 (use-package expand-region)
+
+(use-package ido-at-point
+  :config
+  (ido-at-point-mode))
 
 ;(use-package company
 ;  :defer t

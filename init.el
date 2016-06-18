@@ -9,6 +9,9 @@
 (load-custom "custom")
 (load-custom "custom-hooks")
 
+(when (file-exists-p (concat user-emacs-directory "local.el"))
+  (load-custom "local"))
+
 ;; (byte-compile-if-newer-and-load "my-tex")
 ;; (byte-compile-if-newer-and-load "my-dired")
 
@@ -18,8 +21,13 @@
 (if (not emacs-runned-once) (server-start))
 ;; (if (not emacs-runned-once) (restore-windows-config))
 
-(load-theme 'solarized-light)
 (setq solarized-high-contrast-mode-line t)
+(setq solarized-distinct-doc-face t)
+(setq solarized-distinct-fringe-background t)
+(setq solarized-use-more-italic t)
+(setq solarized-use-less-bold t)
+(setq solarized-emphasize-indicators nil)
+(load-theme 'solarized-light)
 
 ;; this need to be near the end of all customization so that the custom functions are scanned.
 (smex-initialize)
