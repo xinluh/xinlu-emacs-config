@@ -102,7 +102,7 @@
   (setq projectile-mode-line '(:eval
 							   (if
 								   (file-remote-p default-directory)
-								   " Proj"
+								   " {.}"
 								 (format " {%s}"
 										 (projectile-project-name)))))
   (projectile-global-mode)
@@ -125,14 +125,23 @@
 (use-package ag
   :config
   (setq ag-highlight-search t)
-  (setq ag-reuse-window 't)
+  (setq ag-reuse-window t)
+  (setq ag-reuse-buffers t)
   )
+
+(use-package zoom-frm
+  :config
+  (define-key ctl-x-map [(control ?+)] 'zoom-in/out)
+  (define-key ctl-x-map [(control ?-)] 'zoom-in/out)
+  (define-key ctl-x-map [(control ?=)] 'zoom-in/out)
+  (define-key ctl-x-map [(control ?0)] 'zoom-in/out))
 
 ;; also need: sudo pip install jedi flake8 importmagic autopep8 yapf
 (use-package elpy
   :config
   (elpy-enable)
-  (ignore-errors (elpy-use-ipython)) 
+  (setenv "IPY_TEST_SIMPLE_PROMPT" "1") ;; for ipython prompts
+  (ignore-errors (elpy-use-ipython))
   (defun my-elpy-setup ()
 	(local-set-key [M-left] 'pop-tag-mark)
 	(local-set-key [M-down] 'comment-and-go-down)
@@ -180,6 +189,15 @@
 (use-package ido-at-point
   :config
   (ido-at-point-mode))
+
+(use-package solarized-theme
+  :config
+  (setq solarized-high-contrast-mode-line t)
+  (setq solarized-distinct-doc-face t)
+  (setq solarized-distinct-fringe-background t)
+  (setq solarized-use-more-italic t)
+  (setq solarized-use-less-bold t)
+  (setq solarized-emphasize-indicators nil))
 
 ;(use-package company
 ;  :defer t

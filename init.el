@@ -1,3 +1,10 @@
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (defvar emacs-runned-once nil "whether .emacs file has been runned once")
 
 (setq custom-file (concat user-emacs-directory ".emacs-custom.el"))
@@ -21,12 +28,6 @@
 (if (not emacs-runned-once) (server-start))
 ;; (if (not emacs-runned-once) (restore-windows-config))
 
-(setq solarized-high-contrast-mode-line t)
-(setq solarized-distinct-doc-face t)
-(setq solarized-distinct-fringe-background t)
-(setq solarized-use-more-italic t)
-(setq solarized-use-less-bold t)
-(setq solarized-emphasize-indicators nil)
 (load-theme 'solarized-light)
 
 ;; this need to be near the end of all customization so that the custom functions are scanned.

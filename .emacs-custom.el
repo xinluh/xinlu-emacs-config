@@ -14,7 +14,7 @@
 	("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(package-selected-packages
    (quote
-	(ido-at-point gist flx-ido ido-grid-mode ag projectile solarized-theme noflet expand-region web-mode ein flycheck elpy browse-kill-ring highlight-symbol yasnippet magit smex use-package)))
+	(zoom-frm jist web-mode use-package solarized-theme smex projectile pcache noflet magit logito ido-grid-mode ido-at-point highlight-symbol flycheck flx-ido expand-region elpy ein browse-kill-ring ag)))
  '(safe-local-variable-values (quote ((compile-output-file . "a.out"))))
  '(sql-sqlite-program "sqlite3"))
 
