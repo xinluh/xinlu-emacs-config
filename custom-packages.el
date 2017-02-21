@@ -184,6 +184,8 @@
   (local-set-key (kbd "{") 'self-insert-command)
   )
 
+(use-package pug-mode)
+
 (use-package expand-region)
 
 (use-package ido-at-point
@@ -198,6 +200,8 @@
   (setq solarized-use-more-italic t)
   (setq solarized-use-less-bold t)
   (setq solarized-emphasize-indicators nil))
+
+(use-package multiple-cursors)
 
 ;(use-package company
 ;  :defer t

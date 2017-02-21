@@ -44,6 +44,7 @@
 ;; (which-function-mode t)
 (goto-address-mode t)
 (setq resize-mini-windows nil)
+(setq-default cursor-type 'bar)
 
 ;-----editing settings----
 (cua-mode t)
@@ -73,7 +74,7 @@
 (setq comint-prompt-read-only t)
 
 ; -----other settings----
-(setq compilation-scroll-output t) ; always scroll *compilation* buffer
+(setq compilation-scroll-output 'first-error) ; always scroll *compilation* buffer
 ;; (setq grep-find-command "find . -type f -not -name \"*.svn-base\" -print0 | xargs -0 -e grep -nH -e ")
 (setq diff-switches "-u") ; I like unified diff
 (setq compilation-read-command nil)
@@ -134,12 +135,12 @@
 (global-set-key [C-S-f4]        (lambda() (interactive) (kill-buffer (current-buffer))
                                                (delete-window)))
 (global-set-key [f5]            'compile)
-(global-set-key [M-f5]			'reload-file)
+(global-set-key [M-f5]			(lambda() (interactive) (revert-buffer nil t)))
 (global-set-key [f6]			'shell-command-mod)
 (global-set-key [C-f6]			'shell)
 (global-set-key [f7]			'next-error)
 (global-set-key [S-f7]			'previous-error)
-(global-set-key [f8]	        'vcs-start)
+(global-set-key [f8]	        'magit-status)
 (global-set-key [C-f9]	        'highlight-symbol-at-point)
 (global-set-key [f9]	        'highlight-symbol-next)
 (global-set-key [S-f9]	        'highlight-symbol-prev)
@@ -149,7 +150,8 @@
 (global-set-key [f11]	        'visual-line-mode)
 (global-set-key [M-f11]			'toggle-truncate-lines)
 (global-set-key [C-f11]			'auto-fill-mode)
-(global-set-key [f12]	        'google)
+(global-set-key [f12]	        'mc/mark-next-like-this-symbol)
+(global-set-key [C-f12]	        'mc/mark-all-dwim)
 (global-set-key (kbd "<pause>")  'view-mode)
 (global-set-key (kbd "<f13>")  'view-mode)
 (global-set-key (kbd "<Scroll_Lock>")  'restore-windows-config)
@@ -560,7 +562,7 @@
   (select-window (window-at 2 2))
   (delete-other-windows)  (split-window-horizontally)
   (other-window 1) (split-window-vertically)
-  (other-window 1) (set-window-text-height nil 12)
+  (other-window 1) (set-window-text-height nil 30)
   (other-window 1))
 
 (defun google ()
