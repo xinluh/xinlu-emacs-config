@@ -201,7 +201,14 @@
   (setq solarized-use-less-bold t)
   (setq solarized-emphasize-indicators nil))
 
-(use-package multiple-cursors)
+(use-package multiple-cursors
+  :config
+  (global-set-key [f12]	        'mc/mark-next-like-this-symbol)
+  (global-set-key [C-f12]	        'mc/mark-all-dwim)
+  )
+
+(use-package avy
+  :bind (("C-l" . avy-goto-char-2)))
 
 ;(use-package company
 ;  :defer t

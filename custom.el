@@ -150,8 +150,6 @@
 (global-set-key [f11]	        'visual-line-mode)
 (global-set-key [M-f11]			'toggle-truncate-lines)
 (global-set-key [C-f11]			'auto-fill-mode)
-(global-set-key [f12]	        'mc/mark-next-like-this-symbol)
-(global-set-key [C-f12]	        'mc/mark-all-dwim)
 (global-set-key (kbd "<pause>")  'view-mode)
 (global-set-key (kbd "<f13>")  'view-mode)
 (global-set-key (kbd "<Scroll_Lock>")  'restore-windows-config)
