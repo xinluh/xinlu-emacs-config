@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: compt
+# key: compt
+# --
+interface I$1Props {
+    $2
+}
+
+class $1 extends React.Component<I$1Props> {
+  render() {
+    return (
+       ${3:<div>$4</div>}
+    );
+  }
+}

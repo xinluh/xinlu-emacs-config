@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: constructor
+# key: constructor
+# --
+constructor(props: $1) {
+    super(props)
+    this.state = {
+        $2
+    }
+}

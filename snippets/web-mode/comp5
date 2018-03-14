@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: compf
+# key: compf
+# --
+import * as React from 'react';
+import { Component } from 'react';
+import './${1:`(file-name-nondirectory (file-name-sans-extension buffer-file-name))`}.css';
+
+interface I$1Props {
+    $2
+}
+
+class $1 extends React.Component<I$1Props> {
+  render() {
+    return (
+       $3
+    );
+  }
+}
+
+export default $1;

@@ -2,6 +2,7 @@
 (setq inhibit-startup-message t)
 (setq disabled-command-function nil)
 (setq ring-bell-function 'ignore)
+(setq-default indent-tabs-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p) ;make the y or n suffice for a yes or no question
 (setq frame-title-format "%b %+%+ (Emacs)") ;; set emacs title to the document
 (set-scroll-bar-mode 'right )
@@ -246,7 +247,8 @@
 (setq special-display-function 'my-display-buffer-23) 
 ; shown theses in separate frame
 (setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
-									 "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*"
+									 "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*" "*magithub-dispatch-popup*"
+									 "*magithub-pull-request-popup*"
 									 "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
 									 "*Ido Completions*" "*svn-process*"
 									 "*svn-log-edit*" "*Kill Ring*"

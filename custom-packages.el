@@ -70,6 +70,15 @@
   :config
   (setq magit-commit-all-when-nothing-staged t))
 
+(use-package magithub
+  :after magit
+  :config (magithub-feature-autoinject t))
+
+;; (use-package magit-gh-pulls
+;; :after magit
+  ;; :config
+  ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
+
 (use-package yasnippet
   :config (yas-global-mode 1))
 
@@ -129,6 +138,8 @@
   (setq ag-reuse-buffers t)
   )
 
+(use-package wgrep-ag)
+
 (use-package zoom-frm
   :config
   (define-key ctl-x-map [(control ?+)] 'zoom-in/out)
@@ -169,6 +180,7 @@
 (use-package web-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
@@ -177,12 +189,77 @@
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 
-  (setq web-mode-markup-indent-offset 4)
-  (setq web-mode-css-indent-offset 4)
-  (setq web-mode-code-indent-offset 4)
-  (setq web-mode-indent-style 4)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+
+  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+
+  ;; don't quote = signs (super annoying in javascript mode)
+  (setq web-mode-enable-auto-quoting nil)
+
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-indent-style 2)
   (local-set-key (kbd "{") 'self-insert-command)
   )
+
+(use-package tide
+  :config
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    (company-mode +1))
+
+  (setq company-tooltip-align-annotations t)
+
+  ;; formats the buffer before saving
+  ;; (add-hook 'before-save-hook 'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+  (require 'web-mode)
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                (setup-tide-mode))))
+  ;; enable typescript-tslint checker
+  ;; need to install separately: yarn global add tslint typescript
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
+
+)
+
+(use-package go-mode
+  :config
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (add-hook 'go-mode-hook (lambda ()
+                            (company-mode)
+                            (flycheck-mode)
+
+                            ;; gometalinter is little slow :(
+                            (make-variable-buffer-local 'flycheck-idle-change-delay)
+                            (setq flycheck-idle-change-delay 2)
+
+                            (local-set-key (kbd "M-.") 'godef-jump)))
+  )
+
+(use-package go-eldoc
+  :config
+  ;; requires go get -u github.com/nsf/gocode
+  ;; may need to run `gocode set autobuild true` for dep dependencies completion to work
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
+
+(use-package flycheck-gometalinter
+  :ensure t
+  :config
+  (progn
+    (flycheck-gometalinter-setup)))
+
+(use-package company-go
+  :config
+  (add-hook 'go-mode-hook (lambda () (require 'company-go) (company-mode))))
 
 (use-package pug-mode)
 
@@ -208,7 +285,7 @@
   )
 
 (use-package avy
-  :bind (("C-l" . avy-goto-char-2)))
+  :bind (("C-l" . avy-goto-char-timer)))
 
 ;(use-package company
 ;  :defer t
