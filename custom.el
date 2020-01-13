@@ -5,7 +5,7 @@
 (setq-default indent-tabs-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p) ;make the y or n suffice for a yes or no question
 (setq frame-title-format "%b %+%+ (Emacs)") ;; set emacs title to the document
-(set-scroll-bar-mode 'right )
+(set-scroll-bar-mode 'right)
 (setq parens-require-spaces nil)
 (windmove-default-keybindings) ;use shift+up,down,etc. for changing window
 (tool-bar-mode 0)
@@ -15,6 +15,7 @@
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta))
+(setq compilation-always-kill t)
 (setq fill-column 90)
 (icomplete-mode 1) ;shows completions in minibuffer
 (put 'downcase-region 'disabled nil)
@@ -46,6 +47,7 @@
 (goto-address-mode t)
 (setq resize-mini-windows nil)
 (setq-default cursor-type 'bar)
+(setq-default show-trailing-whitespace t)
 
 ;-----editing settings----
 (cua-mode t)
@@ -67,9 +69,17 @@
 ;(setq eldoc-echo-area-use-multiline-p nil)
 
 ; -----shell settings----
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
 (ansi-color-for-comint-mode-on)
 (add-hook 'comint-output-filter-functions ; don't display password in shell
           'comint-watch-for-password-prompt nil t)
+
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (setq explicit-shell-file-name "zsh")
 (setq comint-prompt-read-only t)
@@ -138,7 +148,7 @@
 (global-set-key [f5]            'compile)
 (global-set-key [M-f5]			(lambda() (interactive) (revert-buffer nil t)))
 (global-set-key [f6]			'shell-command-mod)
-(global-set-key [C-f6]			'shell)
+(global-set-key [C-f6]			'repeat-last-shell-command)
 (global-set-key [f7]			'next-error)
 (global-set-key [S-f7]			'previous-error)
 (global-set-key [f8]	        'magit-status)
@@ -219,11 +229,11 @@
 			  (concat "#" (file-name-nondirectory buffer-file-name) "#")
 			(expand-file-name
 			 (concat "#%" (buffer-name) "#")))))
-(setq backup-directory-alist (list (cons autosave-dir "."))) 
+(setq backup-directory-alist (list (cons autosave-dir ".")))
 
 ;; ========================================
 
-;; settings so that windows will open the places I want 
+;; settings so that windows will open the places I want
 (defun get-window-at-corner (corner &optional FRAME)
   "return windows at corner 1 = upper left, 2=upper right, etc"
   (let ((x (cond ((or (= corner 1) (= corner 3)) 4)
@@ -657,7 +667,7 @@
 	  (setq buffer-read-only nil)
 	  (buffer-disable-undo)
 	  (erase-buffer)
-	  (save-excursion 
+	  (save-excursion
 		(dolist (x index-alist)
 		  (insert (car x) "\n"))
 		(if cur (search-backward (concat cur "\n") nil t)))
@@ -680,6 +690,15 @@
 		(set-window-configuration imenu-selection-orig-windows-config)
 		(kill-buffer buf))
 	(pop-to-buffer imenu-selection-target-buffer)))
+
+(defun conda-source-activate (env)
+ "rename frame to NAME"
+ (interactive "sEnv: ")
+ (let ((path (concat "~/anaconda3/envs/" env)))
+  (pyvenv-activate (expand-file-name path))
+
+  ;; pyvenv override PATH apparently
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin:"))))
 
 
 ;; (defun rename-frame (name)
@@ -733,3 +752,9 @@ With prefix ARG non-nil, insert the result at the end of region."
       (goto-char end)
       (save-excursion
         (insert result)))))
+
+(defun repeat-last-shell-command ()
+  (interactive)
+  (save-some-buffers)
+  (message "Running last command [%s]" (car shell-command-history))
+  (shell-command (car shell-command-history)))

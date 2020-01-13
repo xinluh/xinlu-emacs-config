@@ -13,9 +13,13 @@
    (quote
     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(flycheck-check-syntax-automatically (quote (save idle-change new-line mode-enabled)))
+ '(gnutls-trustfiles
+   (quote
+    ("/etc/ssl/certs/ca-certificates.crt" "/etc/pki/tls/certs/ca-bundle.crt" "/etc/ssl/ca-bundle.pem" "/usr/ssl/certs/ca-bundle.crt" "/usr/local/share/certs/ca-root-nss.crt" "/private/etc/ssl/cert.pem")))
+ '(magit-log-arguments (quote ("--graph" "--decorate" "-n256")))
  '(package-selected-packages
    (quote
-    (company-go go-eldoc flycheck-gometalinter tide go-mode magit restclient yaml-mode magithub wgrep-ag json-mode github-browse-file avy multiple-cursors pug-mode zoom-frm web-mode use-package solarized-theme smex projectile pcache noflet logito ido-grid-mode ido-at-point highlight-symbol flycheck flx-ido expand-region elpy browse-kill-ring ag)))
+    (rust-mode protobuf-mode prettier-js prettier-js-mode rvm yasnippet-snippets web-mode color-theme yafolding magithub yasnippet magit-gh-pulls multiple-compile go-playground go-tag go-guru go-rename go-imports go-impl company-go go-eldoc flycheck-gometalinter tide go-mode magit restclient yaml-mode wgrep-ag json-mode github-browse-file avy multiple-cursors pug-mode zoom-frm use-package solarized-theme smex projectile pcache noflet logito ido-grid-mode ido-at-point highlight-symbol flycheck flx-ido expand-region elpy browse-kill-ring ag)))
  '(projectile-other-file-alist
    (quote
     (("cpp" "h" "hpp" "ipp")
@@ -35,7 +39,8 @@
      (nil "lock" "gpg")
      ("lock" "")
      ("gpg" "")
-     ("js" "css")
+     ("js" "css" "jade")
+     ("jade" "js")
      ("css" "js"
       (\, "tsx")
       (\, "jsx"))

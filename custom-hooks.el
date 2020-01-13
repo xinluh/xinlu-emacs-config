@@ -3,10 +3,10 @@
   ;; (local-set-key [tab] 'indent-or-expand)
   ;; (custom-face-dark)
   ; hightlight TODO: FIXME, marks
-  (font-lock-add-keywords nil
-  '(("\\<\\([t|T][o|O][d|D][o|O]:*\\)" 1 font-lock-warning-face prepend)
-	("\\<\\([f|F][i|I][x|X][m|M][e|E]:*\\)" 1 font-lock-warning-face prepend)
-    ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
+  ;; (font-lock-add-keywords nil
+  ;; '(("\\<\\([t|T][o|O][d|D][o|O]:*\\)" 1 font-lock-warning-face prepend)
+  ;;       ("\\<\\([f|F][i|I][x|X][m|M][e|E]:*\\)" 1 font-lock-warning-face prepend)
+  ;;   ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
   (setq truncate-lines t)
   (local-set-key (kbd "C-S-<right>") 'hs-show-block)
   (local-set-key (kbd "C-S-<left>")  'hs-hide-block)
@@ -41,6 +41,10 @@
 (advice-add 'pyvenv-deactivate :after #'my-pyvenv-deactivate)
 
 
+(add-hook 'json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
 
 (defun my-c-mode-hook ()
   (my-programming-mode-hook)

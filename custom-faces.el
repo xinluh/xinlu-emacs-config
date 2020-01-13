@@ -51,9 +51,9 @@
 					  :foreground "green yellow")
   (set-face-attribute 'font-lock-variable-name-face frame 
 					  :foreground "gold")
- (set-face-attribute 'font-lock-warning-face frame 
-					  :foreground "red" 
-					  :weight 'bold)
+ ;; (set-face-attribute 'font-lock-warning-face frame 
+					  ;; :foreground "red" 
+					  ;; :weight 'bold)
 )
 
 
