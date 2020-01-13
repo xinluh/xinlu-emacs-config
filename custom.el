@@ -244,20 +244,32 @@
 		(set-window-buffer (car (cdr windows)) buf)
 		(car (cdr windows))))))
 
-(setq special-display-function 'my-display-buffer-23) 
+; TODO this is deprecated since emacs 24
+(setq special-display-function 'my-display-buffer-23)
 ; shown theses in separate frame
 (setq special-display-buffer-names '("*compilation*" "*Help*" "*shell*"
 									 "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*" "*magithub-dispatch-popup*"
-									 "*magithub-pull-request-popup*"
+									 "*magithub-pull-request-popup*" "*magit-gh-pulls-popup*"
 									 "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
 									 "*Ido Completions*" "*svn-process*"
-									 "*svn-log-edit*" "*Kill Ring*"
+									 "*svn-log-edit*" "*Kill Ring*" "*go-rename*" "*go-guru-output*"
 									 "*imenu-select*" "*Popup Help*"))
+; deprecated
 (setq special-display-regexps '(".*"))
 (setq special-display-frame-alist '((height . 14)
 									(width . 80)
 									(unsplittable . t)
 									(menu-bar-lines nil)))
+
+;================================================
+; go stuff
+
+(defun display-godoc (buf &optional args)
+  (display-special-buffer buf)
+  (go-mode)
+  (local-set-key (kbd "q") 'kill-this-buffer))
+
+(setq display-buffer-alist '(("^\*godoc" . (display-godoc . nil))))
 
 ;================================================
 ; advices
@@ -344,7 +356,7 @@
 (defadvice grep-read-files (around my-rgrep activate)
   (let ((ido-enable-replace-completing-read nil))
 	ad-do-it))
-										
+
 
 ;=================================================
 ; functions
