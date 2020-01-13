@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: eerr
+# key: eerr
+# --
+Expect(${1:err}).NotTo(HaveOccurred())

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ent
+# key: ent
+# --
+Expect($1).NotTo(${2:Equal($3)})

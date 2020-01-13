@@ -1,10 +1,9 @@
 # -*- mode: snippet -*-
 # name: compf
 # key: compf
+#import './${1:`(file-name-nondirectory (file-name-sans-extension buffer-file-name))`}.css';
 # --
 import * as React from 'react';
-import { Component } from 'react';
-import './${1:`(file-name-nondirectory (file-name-sans-extension buffer-file-name))`}.css';
 
 interface I$1Props {
     $2

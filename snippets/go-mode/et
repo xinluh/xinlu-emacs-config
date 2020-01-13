@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: et
+# key: et
+# --
+Expect($1).To(${2:Equal($3)})
