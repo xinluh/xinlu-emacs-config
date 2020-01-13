@@ -100,10 +100,10 @@
   (local-set-key (kbd "W") 'dired-copy-filename-as-kill-newline)
   (local-set-key (kbd "\\") 'dired-do-get-size)
   (local-set-key (kbd "\`") 'dired-up-directory)
-  (local-set-key (kbd "C-s") 'dired-isearch-forward)
+  ;; (local-set-key (kbd "C-s") 'dired-isearch-forward)
   (local-set-key (kbd "I") 'dired-do-insert-subdir-maybe)
   (local-set-key (kbd "j") 'dired-isearch-forward) ; was dired-do-goto-line
-  (local-set-key (kbd "C-r") 'dired-isearch-backward)
+  ;; (local-set-key (kbd "C-r") 'dired-isearch-backward)
   (local-set-key (kbd "ESC C-s") 'dired-isearch-forward-regexp)
   (local-set-key (kbd "ESC C-r") 'dired-isearch-backward-regexp)
   (local-set-key (kbd "<delete>") 'dired-do-delete)

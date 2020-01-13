@@ -20,7 +20,7 @@
   (load-custom "local"))
 
 ;; (byte-compile-if-newer-and-load "my-tex")
-;; (byte-compile-if-newer-and-load "my-dired")
+(load-custom "my-dired")
 
 ;; ; set some private variables
 ;; (load (concat emacsd-dir "personal/personal.el"))
