@@ -78,10 +78,10 @@
   ;; :after magit
   ;; :config (magithub-feature-autoinject t))
 
-(use-package magit-gh-pulls
-  :after magit
-  :config
-  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
+;;(use-package magit-gh-pulls
+;;  :after magit
+;;  :config
+;;  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
 
 (use-package yasnippet
   :config (yas-global-mode 1))
@@ -117,11 +117,11 @@
   (setq projectile-test-suffix-function 'my-projectile-test-suffix)
 
   (setq projectile-mode-line '(:eval
-							   (if
-								   (file-remote-p default-directory)
-								   " {.}"
-								 (format " {%s}"
-										 (projectile-project-name)))))
+	(if
+            (file-remote-p default-directory)
+            " {.}"
+          (format " {%s}"
+                  (projectile-project-name)))))
   (projectile-global-mode)
   )
 
@@ -169,7 +169,11 @@
 	)
   (add-hook 'elpy-mode-hook 'my-elpy-setup))
 
+(use-package poetry
+  :ensure t)
+
 (use-package flycheck
+  :ensure t
   :config
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
@@ -211,12 +215,20 @@
   (setq web-mode-enable-auto-indentation nil)
   (local-set-key (kbd "{") 'self-insert-command)
 
- ;; (add-hook 'web-mode-hook
- ;;   (local-set-key (kbd "<f5>") (lambda() (interactive)
- ;;                                 (save-buffer)
- ;;                                 (save-some-buffers)
- ;;                                 (shell-command "osascript -e 'tell application \"Chrome\" to activate'")))
- ;;   )
+  ;; need to install separately: yarn global add tslint typescript eslint_d
+  (setq flycheck-javascript-eslint-executable "eslint_d")
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+  (add-hook 'web-mode-hook
+            (make-local-variable 'company-minimum-prefix-length)
+            (setq company-minimum-prefix-length 1)
+
+
+            (local-set-key (kbd "<f5>") (lambda() (interactive)
+                                          (save-buffer)
+                                          (save-some-buffers)
+                                          (shell-command "osascript -e 'tell application \"Chrome\" to activate'")))
+            )
   )
 
 (use-package prettier-js
@@ -224,6 +236,7 @@
   (add-hook 'web-mode-hook 'prettier-js-mode))
 
 (use-package tide
+  :after web-mode
   :config
   (defun setup-tide-mode ()
     (interactive)
@@ -238,16 +251,22 @@
   ;; formats the buffer before saving
   ;; (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (flycheck-add-next-checker 'javascript-eslint 'typescript-tide)
 
   (require 'web-mode)
   (add-hook 'web-mode-hook
             (lambda ()
               (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                (setup-tide-mode))))
+                (setup-tide-mode))
+              (when (string-equal "ts" (file-name-extension buffer-file-name))
+                (setup-tide-mode))
+              ))
   ;; enable typescript-tslint checker
-  ;; need to install separately: yarn global add tslint typescript
-  (flycheck-add-mode 'typescript-tslint 'web-mode)
-
+  (flycheck-add-mode 'typescript-tide 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+  (flycheck-add-mode 'typescript-tide 'typescript-mode)
+  (setq flycheck-checkers '(javascript-eslint typescript-tide))
+  ;; (flycheck-add-mode 'javascript-tslint 'typescript-mode)
 )
 
 (use-package go-mode
@@ -366,3 +385,8 @@
 (use-package protobuf-mode)
 
 (use-package rust-mode)
+
+(use-package terraform-mode
+  :config
+  (add-hook 'terraform-mode-hook 'terraform-format-on-save-mode)
+  )
