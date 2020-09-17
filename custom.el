@@ -39,10 +39,7 @@
 
 
 (winner-mode t)
-(setq ediff-split-window-function (lambda (&optional arg)
-									(if (> (frame-width) 150)
-										(split-window-horizontally arg)
-									  (split-window-vertically arg))))
+
 ;; (which-function-mode t)
 (goto-address-mode t)
 (setq resize-mini-windows nil)
@@ -203,8 +200,8 @@
 (define-key ido-file-completion-map (kbd "C-o") 'ido-enter-switch-buffer)
 
 ;; possibly needed
-;; (add-hook 'ido-setup-hook 
-          ;; (lambda () 
+;; (add-hook 'ido-setup-hook
+          ;; (lambda ()
             ;; (define-key ido-completion-map [tab] 'ido-complete)))
 
 
@@ -240,48 +237,33 @@
 				 (t (- (frame-width) 4))))
 		(y (cond ((or (= corner 1) (= corner 2)) 4)
 				 (t (- (frame-height) 4)))))
-	(window-at x y)))
-(defun my-display-buffer-23 (buf &optional args)
-  "put all buffers in a window other than the one in the bottom right"
-  "for emacsen 23 or above"
-  (if (member (buffer-name buf) special-display-buffer-names)
-	  (display-special-buffer buf)
-	(progn
-	  (let ((pop-up-windows t)
-			(windows (delete (minibuffer-window) (window-list))))
-		(if (not (equal (get-window-at-corner 4) (get-window-at-corner 2)))
-			(setq windows (delete (get-window-at-corner 4) windows)))
-		(set-window-buffer (car (cdr windows)) buf)
-		(car (cdr windows))))))
+    (window-at x y)))
 
-; TODO this is deprecated since emacs 24
-(setq special-display-function 'my-display-buffer-23)
+(defun display-special-buffer (buf)
+  "put the special buffer in the right spot (bottom rigt)"
+  (let ((target-window (get-window-at-corner 4))
+        (pop-up-windows t))
+    (set-window-buffer target-window buf)
+    target-window));)
+
+
 ; shown theses in separate frame
-(setq special-display-buffer-names '(
-   "*compilation*" "*Help*" "*shell*"
-   "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*" "*magithub-dispatch-popup*"
-   "*magit-fetch-popup*"
-   "*magithub-pull-request-popup*" "*magit-gh-pulls-popup*"
-   "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
-   "*Ido Completions*" "*svn-process*"
-   "*svn-log-edit*" "*Kill Ring*" "*go-rename*" "*go-guru-output*"
-   "*imenu-select*" "*Popup Help*"))
-; deprecated
-(setq special-display-regexps '(".*"))
-(setq special-display-frame-alist '((height . 14)
-									(width . 80)
-									(unsplittable . t)
-									(menu-bar-lines nil)))
-
-;================================================
-; go stuff
+;; (setq special-display-buffer-names '(
+;;    "*compilation*" "*Help*" "*shell*"
+;;    ;; "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*" "*magithub-dispatch-popup*"
+;;    ;; "*magithub-pull-request-popup*" "*magit-gh-pulls-popup*"
+;;    "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
+;;    "*Ido Completions*" "*svn-process*"
+;;    "*svn-log-edit*" "*Kill Ring*" "*go-rename*" "*go-guru-output*"
+;;    "*imenu-select*" "*Popup Help*"))
 
 (defun display-godoc (buf &optional args)
   (display-special-buffer buf)
   (go-mode)
   (local-set-key (kbd "q") 'kill-this-buffer))
 
-(setq display-buffer-alist '(("^\*godoc" . (display-godoc . nil))))
+(setq display-buffer-alist
+      '(("^\*godoc" . (display-godoc . nil))))
 
 ;================================================
 ; advices
@@ -533,32 +515,6 @@
 
 
 
-(defun display-special-buffer (buf)
-  "put the special buffer in the right spot (bottom rigt)"
-;;   (let ((windows (delete (minibuffer-window) (window-list))))
-;;     (if (eq 1 (length windows))st
-;;         (progn
-;;           (select-window (car windows))
-;;           (split-window-vertically)))
-    (let ((target-window (get-window-at-corner 4))
-          (pop-up-windows t))
-      (set-window-buffer target-window buf)
-      target-window));)
-
-(defun my-display-buffer (buf)
-  "put all buffers in a window other than the one in the bottom right"
-  "for emacsen 22 or below"
-  (if (member (buffer-name buf) special-display-buffer-names)
-	  (display-special-buffer buf)
-	  (progn
-		(let ((pop-up-windows t)
-			  (windows (delete (get-window-at-corner 4)
-                         (delete (minibuffer-window) (window-list)))))
-		  (message (buffer-name (window-buffer (car windows))))
-		  (set-window-buffer (car (cdr windows)) buf)
-		  (car (cdr windows))))))
-
-
 (defun swap-windows ()
   "Swap the buffers in the 2 vertically split windows"
   (interactive)
@@ -596,13 +552,6 @@
   (shell-command "wmctrl -a firefox")
   )
 
-;; (defun browse-img ()
-  ;; (interactive)
-  ;; (make-frame '((name . "View output -Emacs-") (width . 358) (height . 64) ))
-  ;; ;; (raise-frame)
-  ;; ;; (split-window-horizontally)
-  ;; )
-
 (defun build-tag-table (dir-name)
   "Create tag files"
   (interactive "DDirectory: ")
@@ -617,10 +566,6 @@
   (set-face-attribute 'default (selected-frame) :height 120)
   ;; (w32-maximize-frame)
   (restore-windows-config))
-
-(defun larger-font () (interactive)
-  (set-face-attribute 'default (selected-frame) :height 120))
-
 
 ;=============================
 ; provides simple mechanism for recovering accidentally closed files
@@ -702,12 +647,6 @@
   ;; pyvenv override PATH apparently
   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin:"))))
 
-
-;; (defun rename-frame (name)
-  ;; "rename frame to NAME"
-  ;; (interactive "sName: ")
-  ;; (modify-frame-parameters nil '((title . name))))
-
 (defun lorem ()
   "Insert a lorem ipsum."
   (interactive)
@@ -718,13 +657,6 @@
           "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
           "culpa qui officia deserunt mollit anim id est laborum."))
-
-(defun vcs-start ()
-  (interactive)
-  (let ((backend (vc-backend (buffer-file-name))))
-	(when (string-equal backend "SVN") (svn-status default-directory))
-	(when (string-equal backend "Git") (magit-status))
-	(when (string-equal backend "CVS") (cvs-examine default-directory nil))))
 
 (defun find-definition (arg)
   "Jump to the definition of the symbol, type or function at point.

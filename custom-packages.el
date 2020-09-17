@@ -72,7 +72,11 @@
   (setq magit-revert-buffers 1)
   (setq magit-commit-all-when-nothing-staged t)
   (add-to-list 'magit-no-confirm 'stage-all-changes)
-  (setq magit-stage-all-confirm nil))
+  (setq magit-stage-all-confirm nil)
+
+  (with-eval-after-load 'transient
+    (transient-bind-q-to-quit))
+ )
 
 ;; (use-package magithub
   ;; :after magit
