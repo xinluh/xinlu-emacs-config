@@ -70,9 +70,13 @@
 ; -----shell settings----
 (require 'ansi-color)
 (defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (toggle-read-only))
+  (setq-local show-trailing-whitespace nil)
+
+  ;; need to check explicitly for compilation-mode so other inherited modes are not affected
+  ;; https://github.com/Wilfred/ag.el/issues/124
+  (when (eq major-mode 'compilation-mode)(toggle-read-only)
+        (ansi-color-apply-on-region compilation-filter-start (point))
+        (toggle-read-only)))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 (ansi-color-for-comint-mode-on)
