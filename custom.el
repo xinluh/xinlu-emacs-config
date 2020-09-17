@@ -45,6 +45,8 @@
 (setq resize-mini-windows nil)
 (setq-default cursor-type 'bar)
 (setq-default show-trailing-whitespace t)
+(add-hook 'minibuffer-setup-hook
+          (lambda () (setq-local show-trailing-whitespace nil)))
 
 ;-----editing settings----
 (cua-mode t)
