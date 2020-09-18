@@ -150,6 +150,7 @@
                                                (delete-window)))
 (global-set-key [f5]            'compile)
 (global-set-key [M-f5]			(lambda() (interactive) (revert-buffer nil t)))
+(global-set-key [S-M-f5]		'reload-file-force)
 (global-set-key [f6]			'shell-command-mod)
 (global-set-key [C-f6]			'repeat-last-shell-command)
 (global-set-key [f7]			'next-error)
@@ -162,8 +163,8 @@
 (global-set-key [C-f10]	        'kmacro-start-macro)
 (global-set-key [f10]	        'kmacro-end-or-call-macro)
 (global-set-key [f11]	        'visual-line-mode)
-(global-set-key [M-f11]			'toggle-truncate-lines)
-(global-set-key [C-f11]			'auto-fill-mode)
+(global-set-key [M-f11]		'toggle-truncate-lines)
+(global-set-key [C-f11]		'auto-fill-mode)
 (global-set-key (kbd "<pause>")  'view-mode)
 (global-set-key (kbd "<f13>")  'view-mode)
 (global-set-key (kbd "<Scroll_Lock>")  'restore-windows-config)
@@ -245,7 +246,7 @@
 				 (t (- (frame-height) 4)))))
     (window-at x y)))
 
-(defun display-special-buffer (buf)
+(defun display-special-buffer (buf &optional args)
   "put the special buffer in the right spot (bottom rigt)"
   (let ((target-window (get-window-at-corner 4))
         (pop-up-windows t))
@@ -269,7 +270,10 @@
   (local-set-key (kbd "q") 'kill-this-buffer))
 
 (setq display-buffer-alist
-      '(("^\*godoc" . (display-godoc . nil))))
+      '(
+        ("^\*godoc" . (display-godoc . nil))
+        ("^\*Flycheck errors" . (display-special-buffer . nil))
+        ))
 
 ;================================================
 ; advices

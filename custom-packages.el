@@ -144,6 +144,7 @@
   )
 
 (use-package ag
+  :ensure t
   :config
   :ensure t
   (setq ag-highlight-search t)
@@ -220,10 +221,6 @@
   (setq web-mode-enable-auto-indentation nil)
   (local-set-key (kbd "{") 'self-insert-command)
 
-  ;; need to install separately: yarn global add tslint typescript eslint_d
-  (setq flycheck-javascript-eslint-executable "eslint_d")
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-
   (add-hook 'web-mode-hook
             (make-local-variable 'company-minimum-prefix-length)
             (setq company-minimum-prefix-length 1)
@@ -268,9 +265,12 @@
               ))
   ;; enable typescript-tslint checker
   (flycheck-add-mode 'typescript-tide 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
   (flycheck-add-mode 'typescript-tide 'typescript-mode)
   (setq flycheck-checkers '(javascript-eslint typescript-tide))
+  ;; need to install separately: yarn global add tslint typescript eslint_d
+  (setq flycheck-javascript-eslint-exectable "eslint_d")
   ;; (flycheck-add-mode 'javascript-tslint 'typescript-mode)
 )
 
