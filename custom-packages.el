@@ -76,7 +76,31 @@
 
   (with-eval-after-load 'transient
     (transient-bind-q-to-quit))
- )
+
+  (defun gh-pr-create (&optional args)
+    (interactive)
+    (shell-command "gh pr create -f --web")
+    )
+  (defun gh-pr-view (&optional args)
+    (interactive)
+    (shell-command "gh pr view")
+    )
+
+  (transient-define-prefix gh-cmd ()
+    ["Arguments"
+     ("-w" "web" "--web")]
+    [["PR"
+      ("h" "create"         gh-pr-create)
+      ("v" "view"           gh-pr-create)]
+     ])
+
+  (defun magit-hook ()
+    (local-set-key (kbd "H") (lambda () (interactive) (gh-cmd)))
+    )
+  (add-hook 'magit-mode-hook 'magit-hook)
+  )
+
+
 
 ;; (use-package magithub
   ;; :after magit
