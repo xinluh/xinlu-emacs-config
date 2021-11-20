@@ -18,3 +18,8 @@
 /var
 network-security.data
 /magithub
+local.el
+.mc-lists.el
+ede-projects.el
+/straight
+/transient

@@ -1,11 +1,11 @@
 (when (>= emacs-major-version 24)
   (require 'package)
-  
+
   (add-to-list
    'package-archives
    '("melpa" . "http://melpa.org/packages/")
    t)
-  (package-initialize)  
+;  (package-initialize)
 ;  (unless package-archive-contents
 ;	(package-refresh-contents))
 
@@ -16,7 +16,7 @@
   )
 
 ;; make sure external packages that I use are installed
-(setq use-package-always-ensure t) 
+(setq use-package-always-ensure t)
 
 (add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
 
@@ -76,7 +76,30 @@
 
   (with-eval-after-load 'transient
     (transient-bind-q-to-quit))
- )
+
+  (defun gh-pr-create (&optional args)
+    (interactive)
+    (shell-command "gh pr create -f --web")
+    )
+  (defun gh-pr-view (&optional args)
+    (interactive)
+    (shell-command "gh pr view --web `git branch --show-current`")
+    )
+
+  (transient-define-prefix gh-cmd ()
+    ["Arguments"
+     ("-w" "web" "--web")]
+    [["PR"
+      ("h" "create"         gh-pr-create)
+      ("v" "view"           gh-pr-view)]
+     ])
+
+  (defun magit-hook ()
+    (local-set-key (kbd "H") (lambda () (interactive) (gh-cmd)))
+    )
+  (add-hook 'magit-mode-hook 'magit-hook)
+  )
+
 
 ;; (use-package magithub
   ;; :after magit
@@ -109,23 +132,37 @@
   (setq projectile-keymap-prefix (kbd "C-'"))
   (bind-key* (kbd "C-'") 'projectile-command-map)
   ;; (global-set-key (kbd "M-p M-p") 'projectile-find-file)
-  (defun my-projectile-test-suffix (project-type)
-    (cond
-     ((member project-type '(rails-rspec ruby-rspec)) "_spec")
-     ((member project-type '(rails-test ruby-test lein-test go)) "_test")
-     ((member project-type '(django python-pip python-pkg python-tox)) "_tests")
-     ((member project-type '(maven symfony)) "Test")
-     ((member project-type '(gradle grails)) "Spec")
-     (projectile-find-file project-type))
-     )
-  (setq projectile-test-suffix-function 'my-projectile-test-suffix)
+  ;; (defun my-projectile-test-suffix (project-type)
+  ;;   (cond
+  ;;    ((member project-type '(rails-rspec ruby-rspec)) "_spec")
+  ;;    ((member project-type '(rails-test ruby-test lein-test go)) "_test")
+  ;;    ((member project-type '(django python-pip python-pkg python-tox)) "_tests")
+  ;;    ((member project-type '(maven symfony)) "Test")
+  ;;    ((member project-type '(gradle grails)) "Spec")
+  ;;    (message project-type)
+  ;;    (projectile-find-file project-type))
+  ;;    )
+  ;; (setq projectile-test-suffix-function 'my-projectile-test-suffix)
 
-  (setq projectile-mode-line '(:eval
+  (setq projectile-mode-line-function '(lambda ()
 	(if
             (file-remote-p default-directory)
             " {.}"
-          (format " {%s}"
-                  (projectile-project-name)))))
+          (format " {%s|%s}"
+                  (projectile-project-name) (projectile-project-type)))))
+
+  ;; (defun npm-related-files (path)
+  ;;   (let ((js-suffixes concat("js" "ts" "jsx" "tsx")))
+  ;;     (if-let ((suffix js-suffixes))
+  ;;         if (string-suffix-p ) (list :test (concat ))))
+  ;;   )
+  (projectile-register-project-type 'npm '("package.json")
+                                    :compile "npm run build"
+                                    :test "npm run test"
+                                    :run "npm start"
+                                    :test-dir "__tests__"
+                                    :test-suffix ".test")
+  (setq projectile-create-missing-test-files t)
   (projectile-global-mode)
   )
 
@@ -144,12 +181,11 @@
   )
 
 (use-package ag
-  :ensure t
   :config
-  :ensure t
   (setq ag-highlight-search t)
-  (setq ag-reuse-window t)
+  (setq ag-reuse-window nil)
   (setq ag-reuse-buffers t)
+  (setq ag-arguments '("--smart-case" "--stats" "--width=500" "--hidden"))
   )
 
 (use-package wgrep-ag)
@@ -173,13 +209,12 @@
 	(local-set-key [M-up] 'uncomment-and-go-up)
 	(local-set-key (kbd "<f1> M-.") 'elpy-goto-definition-other-window)
 	)
+  (setq elpy-test-runner 'elpy-test-pytest-runner)
   (add-hook 'elpy-mode-hook 'my-elpy-setup))
 
-(use-package poetry
-  :ensure t)
+(use-package poetry)
 
 (use-package flycheck
-  :ensure t
   :config
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
@@ -237,6 +272,8 @@
   :config
   (add-hook 'web-mode-hook 'prettier-js-mode))
 
+(use-package jest-test-mode)
+
 (use-package tide
   :after web-mode
   :config
@@ -246,32 +283,37 @@
     (flycheck-mode +1)
     (eldoc-mode +1)
     (tide-hl-identifier-mode +1)
-    (company-mode +1))
+    (company-mode +1)
+
+    ;; enable typescript-tslint checker
+    ;; need to install separately: yarn global add tslint typescript eslint_d
+    (flycheck-add-mode 'typescript-tide 'web-mode)
+    (flycheck-add-mode 'typescript-tide 'typescript-mode)
+    (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
+    (flycheck-add-next-checker 'typescript-tide '(t . javascript-eslint) 'append)
+    )
 
   (setq company-tooltip-align-annotations t)
 
   ;; formats the buffer before saving
   ;; (add-hook 'before-save-hook 'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
-  (flycheck-add-next-checker 'javascript-eslint 'typescript-tide)
 
   (require 'web-mode)
+  (require 'jest-test-mode)
   (add-hook 'web-mode-hook
             (lambda ()
+              (local-set-key (kbd "C-c C-t") 'jest-test-run-at-point)
               (when (string-equal "tsx" (file-name-extension buffer-file-name))
                 (setup-tide-mode))
               (when (string-equal "ts" (file-name-extension buffer-file-name))
                 (setup-tide-mode))
               ))
-  ;; enable typescript-tslint checker
-  (flycheck-add-mode 'typescript-tide 'web-mode)
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
-  (flycheck-add-mode 'typescript-tide 'typescript-mode)
-  (setq flycheck-checkers '(javascript-eslint typescript-tide))
-  ;; need to install separately: yarn global add tslint typescript eslint_d
-  (setq flycheck-javascript-eslint-exectable "eslint_d")
-  ;; (flycheck-add-mode 'javascript-tslint 'typescript-mode)
+
+  (setq flycheck-javascript-eslint-executable "eslint_d")
+  ;; this causes problem apparently
+  ;; (setq flycheck-eslint-args "--rule 'prettier/prettier: 0'")
 )
 
 (use-package go-mode
@@ -331,7 +373,6 @@
 
 
 (use-package flycheck-gometalinter
-  :ensure t
   :after go-mode
   :config
   (progn
@@ -395,3 +436,34 @@
   :config
   (add-hook 'terraform-mode-hook 'terraform-format-on-save-mode)
   )
+
+(use-package so-long
+  :config
+  (global-so-long-mode t)
+)
+
+; straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+; this causes problems :(
+;(straight-use-package 'use-package)
+(straight-use-package '(beancount
+             :type git
+             :host github
+             :repo "cnsunyour/beancount.el"))
+;; also made a modification of the source file locally to fix the account regex string
+;; "\\(?::[[:upper:]][[:alnum:]-_]+\\)+"  ->  "\\(?::[[:upper:]][[:alnum:]-_]*\\)+"
+(add-to-list 'auto-mode-alist '("\\.bean\\(?:count\\)?\\'" . beancount-mode))
+(add-hook 'beancount-mode-hook (lambda () (outline-minor-mode) (outline-hide-sublevels 1)))
+

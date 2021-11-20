@@ -12,11 +12,13 @@
 (when (eq system-type 'gnu/linux);; copy & paste properly on linux
 	  (setq x-select-enable-clipboard t)
 	  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
+
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'super)
   (setq mac-command-modifier 'meta))
+
 (setq compilation-always-kill t)
-(setq fill-column 90)
+(setq fill-column 120)
 (icomplete-mode 1) ;shows completions in minibuffer
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -33,7 +35,7 @@
 (setq ido-save-directory-list-file (concat user-emacs-directory "personal/.ido.last"))
 (setq ido-ignore-buffers '("^\\*svn" "\\` " "\\*Kill Ring\\*" "\\*Warnings\\*"
 						   "^\\*tramp" "\\*Completions\\*"
-						   "^\\*Ido" "\\*shell\\*" "\\*Help"
+						   "^\\*Ido" "\\*Help"
 						   "^\\*.*output\\*" "^\\*TeX Help\\*"
 						   "^\\*magit-.*\\*" "^\\*imenu-select\\*"))
 
@@ -47,6 +49,9 @@
 (setq-default show-trailing-whitespace t)
 (add-hook 'minibuffer-setup-hook
           (lambda () (setq-local show-trailing-whitespace nil)))
+
+;; nightly, clean up buffers not used in last 3 days
+(midnight-delay-set 'midnight-delay "4:30am")
 
 ;-----editing settings----
 (cua-mode t)
@@ -96,9 +101,13 @@
 (setq message-send-mail-function 'message-send-mail-with-sendmail)
 (setq sendmail-program "msmtp")
 (setq message-sendmail-extra-arguments (list "-C"
-										 (expand-file-name "~/.emacs.d/personal/msmtp.config")))
+            (expand-file-name "~/.emacs.d/personal/msmtp.config")))
 
 ; -----keyboard bindings-----
+
+; this is used for system level shortcuts
+(global-unset-key (kbd "s-l"))
+
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 (global-set-key (kbd "C-;")     'dabbrev-expand)
 (global-set-key (kbd "C-c m")   'imenu-selection-buffer)
@@ -154,6 +163,7 @@
 (global-set-key [f6]			'shell-command-mod)
 (global-set-key [C-f6]			'repeat-last-shell-command)
 (global-set-key [f7]			'next-error)
+(global-set-key [C-f7]			'tide-fix)
 (global-set-key [S-f7]			'previous-error)
 (global-set-key [f8]	        'magit-status)
 (global-set-key [C-f9]	        'highlight-symbol-at-point)
@@ -255,14 +265,14 @@
 
 
 ; shown theses in separate frame
-;; (setq special-display-buffer-names '(
-;;    "*compilation*" "*Help*" "*shell*"
-;;    ;; "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*" "*magithub-dispatch-popup*"
-;;    ;; "*magithub-pull-request-popup*" "*magit-gh-pulls-popup*"
-;;    "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
-;;    "*Ido Completions*" "*svn-process*"
-;;    "*svn-log-edit*" "*Kill Ring*" "*go-rename*" "*go-guru-output*"
-;;    "*imenu-select*" "*Popup Help*"))
+(setq special-buffer-names '(
+   "*compilation*" "*Help*" "*shell*"
+   ;; "*magit-rebase-popup*" "*magit-commit-popup*" "*magit-push-popup*" "*magithub-dispatch-popup*"
+   ;; "*magithub-pull-request-popup*" "*magit-gh-pulls-popup*"
+   "*Completions*" "*Buffer List*" "*Deletions*" "*Warnings*"
+   "*Ido Completions*" "*svn-process*"
+   "*svn-log-edit*" "*Kill Ring*" "*go-rename*" "*go-guru-output*"
+   "*imenu-select*" "*Popup Help*"))
 
 (defun display-godoc (buf &optional args)
   (display-special-buffer buf)
@@ -273,6 +283,11 @@
       '(
         ("^\*godoc" . (display-godoc . nil))
         ("^\*Flycheck errors" . (display-special-buffer . nil))
+        ("^\*ag search" . (display-special-buffer . nil))
+        ("^\*compilation\*" . (display-special-buffer . nil))
+        ("^\*Help\*" . (display-special-buffer . nil))
+        ("^\*Kill Ring\*" . (display-special-buffer . nil))
+        ("^\*tide-references\*" . (display-special-buffer . nil))
         ))
 
 ;================================================
@@ -479,7 +494,7 @@
 		(message "Buffer '%s' is not visiting a file!" name)
 	  (if (get-buffer new-name)
 		  (message "A buffer named '%s' already exists!" new-name)
-		(progn 	 (rename-file name new-name 1) 	 (rename-buffer new-name) 	 (set-visited-file-name new-name) 	 (set-buffer-modified-p nil)))))) ;;
+		(progn 	 (rename-file name new-name 1) 	 (rename-buffer new-name) 	 (set-visited-file-name new-name) 	 (set-buffer-modified-p nil))))))
 
 (defun move-file-and-buffer (dir)
   "Moves both current buffer and file it's visiting to DIR."
