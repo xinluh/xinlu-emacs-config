@@ -1,4 +1,4 @@
-(when (>= emacs-major-version 24)
+(when (and (>= emacs-major-version 24) (< emacs-major-version 19))
   (require 'package)
 
   (add-to-list
@@ -16,6 +16,9 @@
   )
 
 ;; make sure external packages that I use are installed
+(when (>= emacs-major-version 29)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (require 'use-package-ensure))
 (setq use-package-always-ensure t)
 
 (add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))

@@ -2,10 +2,11 @@
 (setq inhibit-startup-message t)
 (setq disabled-command-function nil)
 (setq ring-bell-function 'ignore)
+(setq confirm-kill-processes nil)
 (setq-default indent-tabs-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p) ;make the y or n suffice for a yes or no question
 (setq frame-title-format "%b %+%+ (Emacs)") ;; set emacs title to the document
-(set-scroll-bar-mode 'right)
+;(set-scroll-bar-mode 'right)
 (setq parens-require-spaces nil)
 (windmove-default-keybindings) ;use shift+up,down,etc. for changing window
 (tool-bar-mode 0)
@@ -303,17 +304,13 @@
   "activate the next buffer whenever window splits"
   (set-window-buffer (next-window) (other-buffer)))
 
-;; don't quit frame ???
-(defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
-  (noflet ((one-window-p (&optional nomini all-frames) t)) ad-do-it))
+;; don't quit frame ??? probably not needed in modern emacs
+;; (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
+;;  (noflet ((one-window-p (&optional nomini all-frames) t)) ad-do-it))
 
 (defadvice compile (before my-compile activate)
   "save buffer before compile"
   (save-buffer))
-
-(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  "Prevent annoying 'Active processes exist' query when you quit Emacs."
-  (noflet ((process-list ())) ad-do-it))
 
 ;; doens't work :(
 ;; (defadvice shell-command (around my-shell-command (COMMAND &optional OUTPUT-BUFFER ERROR-BUFFER) activate)
