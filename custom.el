@@ -10,6 +10,7 @@
 (setq parens-require-spaces nil)
 (windmove-default-keybindings) ;use shift+up,down,etc. for changing window
 (tool-bar-mode 0)
+(if (not window-system) (menu-bar-mode -1))
 (when (eq system-type 'gnu/linux);; copy & paste properly on linux
 	  (setq x-select-enable-clipboard t)
 	  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))

@@ -183,22 +183,22 @@
   (setq gc-cons-threshold 20000000) ; better GC threshold for flx
   )
 
-(use-package ag
-  :config
-  (setq ag-highlight-search t)
-  (setq ag-reuse-window nil)
-  (setq ag-reuse-buffers t)
-  (setq ag-arguments '("--smart-case" "--stats" "--width=500" "--hidden"))
-  )
+;; (use-package ag
+  ;; :config
+  ;; (setq ag-highlight-search t)
+  ;; (setq ag-reuse-window nil)
+  ;; (setq ag-reuse-buffers t)
+  ;; (setq ag-arguments '("--smart-case" "--stats" "--width=500" "--hidden"))
+  ;; )
 
 (use-package wgrep-ag)
 
-(use-package zoom-frm
-  :config
-  (define-key ctl-x-map [(control ?+)] 'zoom-in/out)
-  (define-key ctl-x-map [(control ?-)] 'zoom-in/out)
-  (define-key ctl-x-map [(control ?=)] 'zoom-in/out)
-  (define-key ctl-x-map [(control ?0)] 'zoom-in/out))
+;; (use-package zoom-frm
+  ;; :config
+  ;; (define-key ctl-x-map [(control ?+)] 'zoom-in/out)
+  ;; (define-key ctl-x-map [(control ?-)] 'zoom-in/out)
+  ;; (define-key ctl-x-map [(control ?=)] 'zoom-in/out)
+  ;; (define-key ctl-x-map [(control ?0)] 'zoom-in/out))
 
 ;; also need: sudo pip install jedi flake8 importmagic autopep8 yapf
 (use-package elpy
